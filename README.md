@@ -17,7 +17,7 @@ Just open `index.html` in any browser.
 1. Push this repo to GitHub (private)
 2. Go to Settings → Pages
 3. Deploy from main branch
-4. Access at: `https://yourusername.github.io/workout-tracker`
+4. Access at: `https://sunilboreddy.github.io/workout-tracker`
 
 ## Stack
 - Pure HTML, CSS, JavaScript
