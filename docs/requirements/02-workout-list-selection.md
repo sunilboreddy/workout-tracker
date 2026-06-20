@@ -6,3 +6,5 @@
 - Favorited workouts must be easy to find in the list.
 
 *(Implementation note: exact list layout and favorite-filtering UI are deferred to `docs/design/`.)*
+
+**Tracked in:** Requirements #3, Design #8

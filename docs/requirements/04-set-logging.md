@@ -6,3 +6,5 @@
 - Logged data must remain compatible with the existing workout history and progress stats (total workouts, this week, best pull-ups, best push-ups) so nothing in the current Tracker tab breaks.
 
 *(Implementation note: exact save format is deferred to `docs/design/`, constrained by compatibility with the existing workout history feature.)*
+
+**Tracked in:** Requirements #5, Design #10

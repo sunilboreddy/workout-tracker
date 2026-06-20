@@ -7,3 +7,5 @@
 - The timer does not need to survive the user leaving the app.
 
 *(Implementation note: countdown UI and notification APIs used are deferred to `docs/design/`.)*
+
+**Tracked in:** Requirements #6, Design #11

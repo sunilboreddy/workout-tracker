@@ -10,3 +10,5 @@
 - There is no plan duplication feature.
 
 *(Implementation note: storage mechanism and exact data shape are deferred to `docs/design/`.)*
+
+**Tracked in:** Requirements #2, Design #7
