@@ -17,6 +17,15 @@ There is no build or test tooling. To work on this app:
 
 Static GitHub Pages deploy: push to the repo, enable Pages from the main branch, served at `https://<user>.github.io/workout-tracker`.
 
+## Project docs
+
+Feature work is documented under `docs/` in three phases, each referencing the previous:
+- `docs/requirements/` — what we're building and why, never how. Small capability-focused files with an `index.md` linking them.
+- `docs/design/` — how we'll build it (data model, UI flow, code structure). Each design doc references the specific `docs/requirements/*.md` file(s) it implements.
+- `docs/build/` — implementation notes/changelog for the build phase. Each build doc references the specific `docs/design/*.md` file(s) it follows.
+
+When starting a new feature: write requirements first, then design referencing those requirements, then build referencing that design — don't skip ahead, and don't let implementation details leak into requirements docs.
+
 ## Architecture
 
 Everything is in `index.html`, organized in three parts:
