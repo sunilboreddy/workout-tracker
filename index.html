@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Transformation Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #141921;
+            --bg-card: #1a1f2e;
+            --accent-primary: #00f5a0;
+            --accent-secondary: #00d9f5;
+            --accent-warm: #ff6b35;
+            --text-primary: #e8eaf0;
+            --text-secondary: #a0a8b8;
+            --text-muted: #6b7280;
+            --border: #2a3142;
+            --shadow: rgba(0, 245, 160, 0.1);
+        }
+
+        body {
+            font-family: 'Darker Grotesque', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0;
+            position: relative;
+        }
+
+        .hero {
+            padding: 3rem 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+            opacity: 0.05;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.05; }
+            50% { transform: scale(1.2); opacity: 0.08; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            overflow-x: auto;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.02em;
+        }
+
+        .tab.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .content {
+            padding: 1.5rem;
+        }
+
+        .workout-split {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .workout-split.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 2rem 0 1rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 70%;
+            background: linear-gradient(180deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            border-radius: 2px;
+        }
+
+        .day-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .day-card:active {
+            transform: scale(0.98);
+        }
+
+        .day-header {
+            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .day-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .day-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .expand-icon {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--accent-secondary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--accent-secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .day-card.expanded .expand-icon {
+            transform: rotate(45deg);
+        }
+
+        .day-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .day-card.expanded .day-content {
+            max-height: 5000px;
+        }
+
+        .day-section {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .day-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .exercise {
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .exercise::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-warm);
+            border-radius: 50%;
+        }
+
+        .exercise-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .exercise-details {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(0, 245, 160, 0.05) 0%, rgba(0, 217, 245, 0.05) 100%);
+            border: 1px solid rgba(0, 245, 160, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid var(--accent-warm);
+            color: var(--accent-warm);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .schedule-day {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem;
+        }
+
+        .schedule-day.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        .schedule-day.rest {
+            background: var(--bg-secondary);
+            opacity: 0.5;
+        }
+
+        .day-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .schedule-day.active .day-label {
+            color: var(--bg-primary);
+            opacity: 0.7;
+        }
+
+        /* TRACKING STYLES */
+        .tracker-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tracker-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        .add-workout-btn {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-workout-btn:active {
+            transform: scale(0.95);
+        }
+
+        .workout-log {
+            margin-bottom: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .workout-log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .workout-date {
+            font-size: 0.85rem;
+            color: var(--accent-secondary);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .workout-type {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .delete-workout {
+            background: rgba(255, 107, 53, 0.1);
+            border: 1px solid var(--accent-warm);
+            color: var(--accent-warm);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .exercise-log {
+            margin-bottom: 0.75rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--accent-primary);
+        }
+
+        .exercise-log-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .exercise-log-sets {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        .close-modal {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:active {
+            transform: scale(0.9);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Darker Grotesque', sans-serif;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .exercise-entry {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .remove-exercise {
+            background: transparent;
+            border: none;
+            color: var(--accent-warm);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .sets-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .set-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .set-input input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+        }
+
+        .set-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            min-width: 60px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .add-set-btn,
+        .add-exercise-btn {
+            background: transparent;
+            border: 2px dashed var(--border);
+            color: var(--text-secondary);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .add-set-btn:active,
+        .add-exercise-btn:active {
+            background: var(--bg-secondary);
+        }
+
+        .save-workout-btn {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .save-workout-btn:active {
+            transform: scale(0.98);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-text {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-stat {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .progress-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .progress-stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        .progress-stat-unit {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            h1 {
+                font-size: 3.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .progress-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Workout Transformation</h1>
+                <p class="subtitle">From Machines to Functional Strength</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Current</div>
+                        <div class="stat-value">84kg</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Target</div>
+                        <div class="stat-value">75-80kg</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Height</div>
+                        <div class="stat-value">6'0"</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Daily Cal</div>
+                        <div class="stat-value">2000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab" data-tab="tracker">📊 Tracker</button>
+            <button class="tab active" data-tab="3day">3-Day Split</button>
+            <button class="tab" data-tab="4day">4-Day Split</button>
+            <button class="tab" data-tab="5day">5-Day Split</button>
+            <button class="tab" data-tab="progression">Progressions</button>
+        </div>
+
+        <div class="content">
+            <!-- TRACKER TAB -->
+            <div class="workout-split" id="tracker">
+                <div class="tracker-header">
+                    <h2 class="tracker-title">Workout History</h2>
+                    <button class="add-workout-btn" onclick="openAddWorkoutModal()">+ Log Workout</button>
+                </div>
+
+                <div class="progress-stats" id="progressStats">
+                    <div class="progress-stat">
+                        <div class="progress-stat-label">Workouts</div>
+                        <div class="progress-stat-value">0</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="progress-stat-label">This Week</div>
+                        <div class="progress-stat-value">0</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="progress-stat-label">Best Pull-ups</div>
+                        <div class="progress-stat-value">--</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="progress-stat-label">Best Push-ups</div>
+                        <div class="progress-stat-value">--</div>
+                    </div>
+                </div>
+
+                <div id="workoutHistory">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💪</div>
+                        <div class="empty-state-text">No workouts logged yet.<br>Tap the button above to get started!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3-DAY SPLIT -->
+            <div class="workout-split active" id="3day">
+                <div class="info-box">
+                    <div class="info-title">💪 3-Day Split Overview</div>
+                    <div class="info-text">
+                        <strong>Best for:</strong> Recovery prioritization, beginners to free weights, busy schedules<br>
+                        <strong>Pattern:</strong> Mon/Wed/Fri • Full rest on weekends
+                    </div>
+                </div>
+
+                <div class="schedule-grid">
+                    <div class="schedule-day active">
+                        <div>MON</div>
+                        <div class="day-label">Upper</div>
+                    </div>
+                    <div class="schedule-day rest">
+                        <div>TUE</div>
+                        <div class="day-label">Rest</div>
+                    </div>
+                    <div class="schedule-day active">
+                        <div>WED</div>
+                        <div class="day-label">Lower</div>
+                    </div>
+                    <div class="schedule-day rest">
+                        <div>THU</div>
+                        <div class="day-label">Rest</div>
+                    </div>
+                    <div class="schedule-day active">
+                        <div>FRI</div>
+                        <div class="day-label">Pull</div>
+                    </div>
+                    <div class="schedule-day rest">
+                        <div>SAT</div>
+                        <div class="day-label">Rest</div>
+                    </div>
+                    <div class="schedule-day rest">
+                        <div>SUN</div>
+                        <div class="day-label">Rest</div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header" onclick="toggleDay(this)">
+                        <div class="day-title">
+                            <span class="day-number">1</span>
+                            Upper Body Push + Core
+                        </div>
+                        <div class="expand-icon">+</div>
+                    </div>
+                    <div class="day-content">
+                        <div class="day-section">
+                            <div class="section-title">🔥 Warm-up (8-10 min)</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Arm Circles</div>
+                                <div class="exercise-details">30s each direction</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Band Pull-aparts</div>
+                                <div class="exercise-details">15 reps</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Scapular Push-ups</div>
+                                <div class="exercise-details">10 reps</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Dead Hangs</div>
+                                <div class="exercise-details">3 × 10-15s</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">💪 Main Workout</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Push-up Progression <span class="badge">COMPOUND</span></div>
+                                <div class="exercise-details">4 sets × 8-12 reps • Rest: 90s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Dumbbell Chest Press</div>
+                                <div class="exercise-details">4 × 10-12 • 3s negative • Rest: 90s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Dumbbell Shoulder Press</div>
+                                <div class="exercise-details">3 × 10-12 • Standing preferred • Rest: 60s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Lateral Raises</div>
+                                <div class="exercise-details">3 × 12-15 • Light weight • Rest: 60s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Tricep Extension (KB/DB)</div>
+                                <div class="exercise-details">3 × 12-15 • Overhead • Rest: 45s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Pike Push-ups</div>
+                                <div class="exercise-details">3 × 8-12 • Shoulder prep • Rest: 45s</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🎯 Core Circuit (3 rounds)</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Plank</div>
+                                <div class="exercise-details">30-45s hold</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Dead Bug</div>
+                                <div class="exercise-details">10 each side</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Hollow Body Hold</div>
+                                <div class="exercise-details">15-30s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Russian Twists (KB)</div>
+                                <div class="exercise-details">20 total reps</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🏃 Cardio Finisher</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Rowing Machine</div>
+                                <div class="exercise-details">5 min moderate pace</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🧘 Cool-down (5 min)</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Chest Doorway Stretch</div>
+                                <div class="exercise-details">30s each side</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Overhead Tricep Stretch</div>
+                                <div class="exercise-details">30s each arm</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Child's Pose</div>
+                                <div class="exercise-details">45s</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header" onclick="toggleDay(this)">
+                        <div class="day-title">
+                            <span class="day-number">2</span>
+                            Lower Body + Posterior Chain
+                        </div>
+                        <div class="expand-icon">+</div>
+                    </div>
+                    <div class="day-content">
+                        <div class="day-section">
+                            <div class="section-title">🔥 Warm-up (8-10 min)</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Walk/Bike</div>
+                                <div class="exercise-details">5 min light</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Leg Swings</div>
+                                <div class="exercise-details">10 each direction, each leg</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Bodyweight Squats</div>
+                                <div class="exercise-details">15 reps</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Glute Bridges</div>
+                                <div class="exercise-details">15 reps</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">💪 Main Workout</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Goblet Squat <span class="badge">COMPOUND</span></div>
+                                <div class="exercise-details">4 × 10-12 • Hold KB at chest • Rest: 2 min</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Romanian Deadlift (KB/DB)</div>
+                                <div class="exercise-details">4 × 10-12 • Hip hinge pattern • Rest: 2 min</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Bulgarian Split Squat</div>
+                                <div class="exercise-details">3 × 8-10 each leg • Back foot elevated • Rest: 90s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Single-leg RDL</div>
+                                <div class="exercise-details">3 × 10 each • Balance work • Rest: 90s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Glute Bridge March</div>
+                                <div class="exercise-details">3 × 12-15 • Add DB weight • Rest: 60s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Calf Raises</div>
+                                <div class="exercise-details">3 × 15-20 • Full ROM • Rest: 45s</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🎯 Core - Anti-rotation</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Pallof Press (Band)</div>
+                                <div class="exercise-details">3 × 10 each side</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">OR Suitcase Carries</div>
+                                <div class="exercise-details">3 × 30s each side with KB</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🏃 Cardio Finisher</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Treadmill Intervals</div>
+                                <div class="exercise-details">2 min walk / 1 min jog × 3 rounds</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🧘 Cool-down (5 min)</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Standing Quad Stretch</div>
+                                <div class="exercise-details">30s each leg</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Pigeon Pose</div>
+                                <div class="exercise-details">30s each side</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header" onclick="toggleDay(this)">
+                        <div class="day-title">
+                            <span class="day-number">3</span>
+                            Full Body Pull + Core
+                        </div>
+                        <div class="expand-icon">+</div>
+                    </div>
+                    <div class="day-content">
+                        <div class="day-section">
+                            <div class="section-title">🔥 Warm-up (8-10 min)</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Elliptical/Bike</div>
+                                <div class="exercise-details">5 min light</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Scapular Retractions</div>
+                                <div class="exercise-details">15 reps</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Band Rows</div>
+                                <div class="exercise-details">15 reps</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Dead Hangs</div>
+                                <div class="exercise-details">3 × 15s</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">💪 Main Workout</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Pull-up Progression <span class="badge">COMPOUND</span></div>
+                                <div class="exercise-details">5 sets • Band-assisted or negatives • Rest: 2 min</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Dumbbell Bent-Over Row</div>
+                                <div class="exercise-details">4 × 10-12 • Hip hinge position • Rest: 90s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Single-arm DB Row</div>
+                                <div class="exercise-details">3 × 10-12 each • Supported • Rest: 60s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Face Pulls (Band)</div>
+                                <div class="exercise-details">3 × 15-20 • Shoulder health • Rest: 60s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Dumbbell Bicep Curl</div>
+                                <div class="exercise-details">3 × 10-12 • Supinated grip • Rest: 45s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Hammer Curl</div>
+                                <div class="exercise-details">3 × 12-15 • Neutral grip • Rest: 45s</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Farmer's Carry</div>
+                                <div class="exercise-details">3 × 40s • Heavy KB/DB</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🎯 Core Finisher</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Hanging Knee Raises</div>
+                                <div class="exercise-details">3 × 8-12 (or lying leg raises)</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Plank to Downward Dog</div>
+                                <div class="exercise-details">3 × 10 reps</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Side Plank</div>
+                                <div class="exercise-details">2 × 30s each side</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🏃 Cardio Finisher</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Bike HIIT</div>
+                                <div class="exercise-details">30s fast / 90s easy × 5 rounds</div>
+                            </div>
+                        </div>
+
+                        <div class="day-section">
+                            <div class="section-title">🧘 Cool-down (5 min)</div>
+                            <div class="exercise">
+                                <div class="exercise-name">Lat Stretch (Pull-up Bar)</div>
+                                <div class="exercise-details">30s each side</div>
+                            </div>
+                            <div class="exercise">
+                                <div class="exercise-name">Cobra Stretch</div>
+                                <div class="exercise-details">45s</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4-DAY SPLIT -->
+            <div class="workout-split" id="4day">
+                <div class="info-box">
+                    <div class="info-title">💪 4-Day Split Overview</div>
+                    <div class="info-text">
+                        <strong>Best for:</strong> Balanced recovery, moderate volume per session<br>
+                        <strong>Pattern:</strong> Mon/Tue/Thu/Fri or every other day rolling
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-title">📋 Full 4-Day workouts available in original document</div>
+                    <div class="info-text">
+                        The complete 4-day split with all exercises, sets, and reps is in your downloaded markdown file. Use the tracker tab to log your workouts!
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5-DAY SPLIT -->
+            <div class="workout-split" id="5day">
+                <div class="info-box">
+                    <div class="info-title">💪 5-Day Split Overview</div>
+                    <div class="info-text">
+                        <strong>Best for:</strong> Maximum frequency, fastest progress<br>
+                        <strong>Pattern:</strong> Weekdays on, weekends off
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-title">📋 Full 5-Day workouts available in original document</div>
+                    <div class="info-text">
+                        The complete 5-day split with all exercises, sets, and reps is in your downloaded markdown file. Use the tracker tab to log your workouts!
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROGRESSIONS -->
+            <div class="workout-split" id="progression">
+                <h2 class="section-header">How to Progress</h2>
+                
+                <div class="info-box">
+                    <div class="info-title">🎯 Universal Progression Protocol</div>
+                    <div class="info-text">
+                        <strong>Step 1:</strong> Master the rep range (e.g., 3×8-12)<br>
+                        Week 1: 3×8,7,6 → Week 2: 3×9,8,7 → Week 3: 3×10,9,9<br><br>
+                        <strong>Step 2:</strong> Once you hit top range on ALL sets (3×12,12,12)<br>
+                        Add 2-4kg for weights OR advance variation for bodyweight<br><br>
+                        <strong>Step 3:</strong> Reset to bottom of range with new weight<br>
+                        Example: 20kg 3×12 → 24kg 3×8,7,7 (build back up)<br><br>
+                        <strong>Golden Rule:</strong> Add 1-2 total reps per week
+                    </div>
+                </div>
+
+                <h2 class="section-header">Goblet Squat Progression</h2>
+                <div class="tracker-section">
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Weeks 1-4: Foundation</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">16kg KB → 4×10-12 reps</div>
+                            <div class="exercise-log-sets">Focus: Perfect depth, chest up, knees out</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Weeks 5-8: Build Load</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">20-24kg KB → 4×10-12 reps</div>
+                            <div class="exercise-log-sets">Add 2-4kg when you hit 4×12 clean reps</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Weeks 9-12: Heavy Loading</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">28-32kg KB → 4×8-10 reps</div>
+                            <div class="exercise-log-sets">OR Double KB front squat (16kg each hand)</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Week 13+: Advanced</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">32kg+ OR tempo variations</div>
+                            <div class="exercise-log-sets">3s descent, 1s pause, explosive up</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-header">Pull-up Progression</h2>
+                <div class="tracker-section">
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Weeks 1-4: Foundation</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Dead hangs: Build to 3×30s</div>
+                            <div class="exercise-log-sets">Scapular pull-ups: 5×5 | Band-assisted (heavy): 5×5</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Weeks 5-8: Negatives</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Negative pull-ups: 5×3 (5s descent)</div>
+                            <div class="exercise-log-sets">Band-assisted (medium): 5×6-8 reps</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Weeks 9-12: First Pull-up</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Band-assisted (light): 5×8-10</div>
+                            <div class="exercise-log-sets">Attempt 1-2 unassisted at start of session</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div>
+                                <div class="workout-type">Week 13+: Building Volume</div>
+                            </div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Unassisted: 5-8 sets max reps</div>
+                            <div class="exercise-log-sets">Aim for 25-30 total volume per session</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-header">Push-up Progression</h2>
+                <div class="tracker-section">
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div class="workout-type">Weeks 1-4</div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Incline push-ups (high)</div>
+                            <div class="exercise-log-sets">4×10-12 reps</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div class="workout-type">Weeks 5-8</div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Incline push-ups (low)</div>
+                            <div class="exercise-log-sets">4×10-15 reps</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div class="workout-type">Weeks 9-12</div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Floor push-ups (regular)</div>
+                            <div class="exercise-log-sets">4×8-12 reps</div>
+                        </div>
+                    </div>
+
+                    <div class="workout-log">
+                        <div class="workout-log-header">
+                            <div class="workout-type">Week 13+</div>
+                        </div>
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">Advanced variations</div>
+                            <div class="exercise-log-sets">Deficit, archer, or diamond push-ups 4×8-12</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 2rem;">
+                    <div class="info-title">📝 Practical Example</div>
+                    <div class="info-text">
+                        <strong>Week 1:</strong> DB Press 10kg: 10,9,8,8 = 35 total<br>
+                        <strong>Week 2:</strong> DB Press 10kg: 11,10,9,9 = 39 total (+4!)<br>
+                        <strong>Week 3:</strong> DB Press 10kg: 12,11,10,10 = 43 total<br>
+                        <strong>Week 4:</strong> DB Press 10kg: 12,12,12,11 = 47 total ✓<br>
+                        <strong>Week 5:</strong> DB Press 12kg: 8,7,7,6 = 28 total (increased weight!)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Workout Modal -->
+    <div class="modal" id="addWorkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Log Workout</div>
+                <button class="close-modal" onclick="closeAddWorkoutModal()">×</button>
+            </div>
+
+            <form id="workoutForm">
+                <div class="form-group">
+                    <label class="form-label">Workout Type</label>
+                    <select class="form-select" id="workoutType" required>
+                        <option value="">Select workout...</option>
+                        <option value="Upper Body Push">Upper Body Push</option>
+                        <option value="Lower Body">Lower Body</option>
+                        <option value="Upper Body Pull">Upper Body Pull</option>
+                        <option value="Full Body">Full Body</option>
+                        <option value="Lower Hinge">Lower Hinge</option>
+                        <option value="Shoulders + Arms">Shoulders + Arms</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="workoutDate" required>
+                </div>
+
+                <div id="exercisesContainer">
+                    <!-- Exercises will be added here -->
+                </div>
+
+                <button type="button" class="add-exercise-btn" onclick="addExercise()">+ Add Exercise</button>
+
+                <button type="submit" class="save-workout-btn">Save Workout</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize with today's date
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('workoutDate').value = today;
+            loadWorkoutHistory();
+            updateProgressStats();
+            
+            // Add first exercise by default when modal opens
+            setTimeout(() => {
+                if (document.querySelectorAll('.exercise-entry').length === 0) {
+                    addExercise();
+                }
+            }, 100);
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                document.querySelectorAll('.workout-split').forEach(split => {
+                    split.classList.remove('active');
+                });
+                
+                const tabName = this.getAttribute('data-tab');
+                document.getElementById(tabName).classList.add('active');
+                
+                window.scrollTo({ top: 200, behavior: 'smooth' });
+            });
+        });
+
+        // Day card expansion - make globally accessible
+        window.toggleDay = function(element) {
+            const card = element.closest('.day-card');
+            card.classList.toggle('expanded');
+        }
+
+        // Modal functions - make globally accessible
+        window.openAddWorkoutModal = function() {
+            document.getElementById('addWorkoutModal').classList.add('active');
+            document.getElementById('exercisesContainer').innerHTML = '';
+            addExercise();
+        }
+
+        window.closeAddWorkoutModal = function() {
+            document.getElementById('addWorkoutModal').classList.remove('active');
+            document.getElementById('workoutForm').reset();
+            document.getElementById('exercisesContainer').innerHTML = '';
+        }
+
+        let exerciseCount = 0;
+
+        window.addExercise = function() {
+            exerciseCount++;
+            const container = document.getElementById('exercisesContainer');
+            const exerciseEntry = document.createElement('div');
+            exerciseEntry.className = 'exercise-entry';
+            exerciseEntry.id = `exercise-${exerciseCount}`;
+            
+            exerciseEntry.innerHTML = `
+                <div class="exercise-entry-header">
+                    <label class="form-label">Exercise Name</label>
+                    <button type="button" class="remove-exercise" onclick="removeExercise(${exerciseCount})">×</button>
+                </div>
+                <input type="text" class="form-input" id="exerciseName-${exerciseCount}" placeholder="e.g., Goblet Squat" required>
+                
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label class="form-label">Weight (kg)</label>
+                    <input type="number" class="form-input" id="exerciseWeight-${exerciseCount}" placeholder="20" step="0.5">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Sets & Reps</label>
+                    <div class="sets-container" id="sets-${exerciseCount}">
+                        <div class="set-input">
+                            <span class="set-label">Set 1:</span>
+                            <input type="number" placeholder="Reps" id="set-${exerciseCount}-1" required>
+                        </div>
+                    </div>
+                    <button type="button" class="add-set-btn" onclick="addSet(${exerciseCount})">+ Add Set</button>
+                </div>
+            `;
+            
+            container.appendChild(exerciseEntry);
+        }
+
+        window.removeExercise = function(id) {
+            const exercise = document.getElementById(`exercise-${id}`);
+            if (exercise) {
+                exercise.remove();
+            }
+        }
+
+        window.addSet = function(exerciseId) {
+            const setsContainer = document.getElementById(`sets-${exerciseId}`);
+            const setCount = setsContainer.querySelectorAll('.set-input').length + 1;
+            
+            const setInput = document.createElement('div');
+            setInput.className = 'set-input';
+            setInput.innerHTML = `
+                <span class="set-label">Set ${setCount}:</span>
+                <input type="number" placeholder="Reps" id="set-${exerciseId}-${setCount}" required>
+            `;
+            
+            setsContainer.appendChild(setInput);
+        }
+
+        // Save workout
+        document.getElementById('workoutForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const workoutType = document.getElementById('workoutType').value;
+            const workoutDate = document.getElementById('workoutDate').value;
+            
+            const exercises = [];
+            const exerciseEntries = document.querySelectorAll('.exercise-entry');
+            
+            exerciseEntries.forEach(entry => {
+                const id = entry.id.split('-')[1];
+                const name = document.getElementById(`exerciseName-${id}`).value;
+                const weight = document.getElementById(`exerciseWeight-${id}`).value;
+                
+                const sets = [];
+                const setInputs = entry.querySelectorAll('.set-input input');
+                setInputs.forEach(input => {
+                    const reps = input.value;
+                    if (reps) {
+                        sets.push(parseInt(reps));
+                    }
+                });
+                
+                exercises.push({
+                    name,
+                    weight: weight ? parseFloat(weight) : null,
+                    sets
+                });
+            });
+            
+            const workout = {
+                id: Date.now(),
+                type: workoutType,
+                date: workoutDate,
+                exercises
+            };
+            
+            // Save to localStorage
+            let workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+            workouts.unshift(workout);
+            localStorage.setItem('workouts', JSON.stringify(workouts));
+            
+            closeAddWorkoutModal();
+            loadWorkoutHistory();
+            updateProgressStats();
+            
+            // Switch to tracker tab
+            document.querySelector('[data-tab="tracker"]').click();
+        });
+
+        // Load workout history
+        function loadWorkoutHistory() {
+            const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+            const container = document.getElementById('workoutHistory');
+            
+            if (workouts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💪</div>
+                        <div class="empty-state-text">No workouts logged yet.<br>Tap the button above to get started!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = workouts.map(workout => `
+                <div class="workout-log">
+                    <div class="workout-log-header">
+                        <div>
+                            <div class="workout-date">${formatDate(workout.date)}</div>
+                            <div class="workout-type">${workout.type}</div>
+                        </div>
+                        <button class="delete-workout" onclick="deleteWorkout(${workout.id})">Delete</button>
+                    </div>
+                    ${workout.exercises.map(ex => `
+                        <div class="exercise-log">
+                            <div class="exercise-log-name">${ex.name}${ex.weight ? ` • ${ex.weight}kg` : ''}</div>
+                            <div class="exercise-log-sets">${ex.sets.join(', ')} reps (${ex.sets.reduce((a, b) => a + b, 0)} total)</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        // Delete workout
+        function deleteWorkout(id) {
+            const confirmed = confirm('Delete this workout?');
+            if (!confirmed) return;
+            
+            let workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+            workouts = workouts.filter(w => w.id !== id);
+            localStorage.setItem('workouts', JSON.stringify(workouts));
+            
+            loadWorkoutHistory();
+            updateProgressStats();
+        }
+        
+        // Make delete function globally available
+        window.deleteWorkout = deleteWorkout;
+
+        // Update progress stats
+        function updateProgressStats() {
+            const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+            const statsContainer = document.getElementById('progressStats');
+            
+            // Total workouts
+            const totalWorkouts = workouts.length;
+            
+            // This week
+            const now = new Date();
+            const weekStart = new Date(now);
+            weekStart.setDate(now.getDate() - now.getDay());
+            weekStart.setHours(0, 0, 0, 0);
+            
+            const thisWeek = workouts.filter(w => {
+                const workoutDate = new Date(w.date);
+                return workoutDate >= weekStart;
+            }).length;
+            
+            // Best pull-ups and push-ups
+            let bestPullups = '--';
+            let bestPushups = '--';
+            
+            workouts.forEach(workout => {
+                workout.exercises.forEach(ex => {
+                    const name = ex.name.toLowerCase();
+                    const total = ex.sets.reduce((a, b) => a + b, 0);
+                    
+                    if (name.includes('pull-up') || name.includes('pullup')) {
+                        if (bestPullups === '--' || total > bestPullups) {
+                            bestPullups = total;
+                        }
+                    }
+                    
+                    if (name.includes('push-up') || name.includes('pushup') || name.includes('push up')) {
+                        if (bestPushups === '--' || total > bestPushups) {
+                            bestPushups = total;
+                        }
+                    }
+                });
+            });
+            
+            statsContainer.innerHTML = `
+                <div class="progress-stat">
+                    <div class="progress-stat-label">Workouts</div>
+                    <div class="progress-stat-value">${totalWorkouts}</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-label">This Week</div>
+                    <div class="progress-stat-value">${thisWeek}</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-label">Best Pull-ups</div>
+                    <div class="progress-stat-value">${bestPullups}</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-label">Best Push-ups</div>
+                    <div class="progress-stat-value">${bestPushups}</div>
+                </div>
+            `;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+        }
+
+        // Touch feedback
+        document.querySelectorAll('.tab, .day-header, .add-workout-btn').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.7';
+            });
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>
