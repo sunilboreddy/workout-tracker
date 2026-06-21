@@ -1811,6 +1811,20 @@
 
         let restTimerInterval = null;
         let restTimerRemaining = 0;
+        let restTimerAudioCtx = null;
+
+        function unlockRestTimerAudio() {
+            try {
+                if (!restTimerAudioCtx) {
+                    restTimerAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (restTimerAudioCtx.state === 'suspended') {
+                    restTimerAudioCtx.resume();
+                }
+            } catch (e) {
+                // AudioContext unsupported - degrade gracefully
+            }
+        }
 
         function renderRestTimerSlot() {
             const slot = document.getElementById('restTimerSlot');
@@ -1838,6 +1852,7 @@
         }
 
         window.startRestTimer = function(seconds) {
+            unlockRestTimerAudio();
             if (restTimerInterval) {
                 clearInterval(restTimerInterval);
             }
@@ -1878,7 +1893,7 @@
             renderRestTimerSlot();
 
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const ctx = restTimerAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = ctx.createOscillator();
                 const gain = ctx.createGain();
                 oscillator.connect(gain);
