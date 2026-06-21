@@ -22,6 +22,7 @@ These documents describe **how** the requirements get implemented within the exi
 4. [04-set-logging.md](./04-set-logging.md) — per-exercise set entry UI and save format
 5. [05-rest-timer.md](./05-rest-timer.md) — countdown UI, sound/vibration
 6. [07-import-plan.md](./07-import-plan.md) — Import Plan modal, expected JSON shape, validation
-7. [08-edit-logged-sets.md](./08-edit-logged-sets.md) — clickable/removable set chips during tracking
+
+Note: editing/deleting a logged set is a CR against [04-set-logging.md](./04-set-logging.md), not a separate file — see the "CR" section there.
 
 Build (`docs/build/`) comes next, referencing these files.

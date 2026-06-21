@@ -14,6 +14,7 @@ These documents describe **what** the app needs to do and **why** — not how it
 5. [05-rest-timer.md](./05-rest-timer.md) — the rest timer between sets
 6. [06-open-questions.md](./06-open-questions.md) — anything still undecided
 7. [07-import-plan.md](./07-import-plan.md) — creating a plan by pasting Claude-generated JSON instead of manual entry
-8. [08-edit-logged-sets.md](./08-edit-logged-sets.md) — editing/deleting a logged set during an active tracking session
+
+Note: editing/deleting a logged set is a CR against [04-set-logging.md](./04-set-logging.md), not a separate file — see the "CR" section there.
 
 Design (`docs/design/`) and build (`docs/build/`) docs come later, each referencing the requirement files above.
