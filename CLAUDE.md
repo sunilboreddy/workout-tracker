@@ -19,12 +19,17 @@ Static GitHub Pages deploy: push to the repo, enable Pages from the main branch,
 
 ## Project docs
 
-Feature work is documented under `docs/` in three phases, each referencing the previous:
-- `docs/requirements/` — what we're building and why, never how. Small capability-focused files with an `index.md` linking them.
+**Every change to `index.html` — feature or bug fix, no exceptions — must be traceable through `docs/` in three phases, each referencing the previous:**
+- `docs/requirements/` — what we're building/fixing and why, never how. Small capability-focused files with an `index.md` linking them.
 - `docs/design/` — how we'll build it (data model, UI flow, code structure). Each design doc references the specific `docs/requirements/*.md` file(s) it implements.
 - `docs/build/` — implementation notes/changelog for the build phase. Each build doc references the specific `docs/design/*.md` file(s) it follows.
 
-When starting a new feature: write requirements first, then design referencing those requirements, then build referencing that design — don't skip ahead, and don't let implementation details leak into requirements docs.
+**Do not write or edit code before this chain exists for the change.** The order is always requirements → design → build → code:
+1. Write or update the requirements doc first — what's broken or wanted, and why.
+2. Write or update the design doc next, referencing that requirements doc — how it'll be implemented.
+3. Only then touch `index.html`, and write/update the build doc referencing that design doc as you go — a real changelog (what was built, deviations, verification), not a pre-written task list.
+
+This applies to bug fixes too, not just new capabilities: a one-line fix still gets a short requirements note (what was broken), a short design note (root cause + fix approach) if it's not trivial, and a build note (what changed, how it was verified) — added to the existing capability's docs (e.g. a "Follow-up fix" section) rather than skipped because it's "just a bug." Don't let implementation details leak into requirements docs, and don't skip ahead in the chain even under time pressure.
 
 ## Architecture
 
