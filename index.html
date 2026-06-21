@@ -760,6 +760,220 @@
             color: var(--text-muted);
         }
 
+        /* WORKOUT LIST & PLANS */
+        .day-header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .favorite-star {
+            background: transparent;
+            border: none;
+            font-size: 1.4rem;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0.25rem;
+        }
+
+        .favorite-star.active {
+            color: var(--accent-warm);
+        }
+
+        .start-btn {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.5rem 1.1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .workouts-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .fav-filter-chip {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.6rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .fav-filter-chip.active {
+            background: var(--accent-warm);
+            border-color: var(--accent-warm);
+            color: #fff;
+        }
+
+        /* TRACKING VIEW */
+        body.tracking-active .tabs,
+        body.tracking-active .content > .workout-split {
+            display: none;
+        }
+
+        #trackingView {
+            display: none;
+        }
+
+        body.tracking-active #trackingView {
+            display: block;
+        }
+
+        .tracking-end-bar {
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tracking-plan-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        .tracking-end-btn {
+            background: var(--accent-warm);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: 100px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tracking-exercise {
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        .set-log-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.5rem 0;
+        }
+
+        .set-log-chip {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+        }
+
+        .log-set-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .log-set-row input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .log-set-row button {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* REST TIMER */
+        .rest-timer-slot {
+            position: sticky;
+            bottom: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .rest-timer-presets {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .rest-preset-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .rest-custom-input {
+            width: 80px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .rest-timer-countdown {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-secondary);
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .rest-cancel-btn {
+            background: transparent;
+            border: 2px solid var(--accent-warm);
+            color: var(--accent-warm);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            width: 100%;
+        }
+
         @media (min-width: 768px) {
             .container {
                 max-width: 800px;
@@ -811,10 +1025,8 @@
         </div>
 
         <div class="tabs">
+            <button class="tab active" data-tab="workouts">🏋️ Workouts</button>
             <button class="tab" data-tab="tracker">📊 Tracker</button>
-            <button class="tab active" data-tab="3day">3-Day Split</button>
-            <button class="tab" data-tab="4day">4-Day Split</button>
-            <button class="tab" data-tab="5day">5-Day Split</button>
             <button class="tab" data-tab="progression">Progressions</button>
         </div>
 
@@ -853,376 +1065,17 @@
                 </div>
             </div>
 
-            <!-- 3-DAY SPLIT -->
-            <div class="workout-split active" id="3day">
-                <div class="info-box">
-                    <div class="info-title">💪 3-Day Split Overview</div>
-                    <div class="info-text">
-                        <strong>Best for:</strong> Recovery prioritization, beginners to free weights, busy schedules<br>
-                        <strong>Pattern:</strong> Mon/Wed/Fri • Full rest on weekends
-                    </div>
+            <!-- WORKOUTS TAB -->
+            <div class="workout-split active" id="workouts">
+                <div class="workouts-toolbar">
+                    <button class="fav-filter-chip" id="favFilterChip" onclick="toggleFavoritesFilter()">★ Favorites only</button>
+                    <button class="add-workout-btn" onclick="openNewPlanModal()">+ New Plan</button>
                 </div>
-
-                <div class="schedule-grid">
-                    <div class="schedule-day active">
-                        <div>MON</div>
-                        <div class="day-label">Upper</div>
-                    </div>
-                    <div class="schedule-day rest">
-                        <div>TUE</div>
-                        <div class="day-label">Rest</div>
-                    </div>
-                    <div class="schedule-day active">
-                        <div>WED</div>
-                        <div class="day-label">Lower</div>
-                    </div>
-                    <div class="schedule-day rest">
-                        <div>THU</div>
-                        <div class="day-label">Rest</div>
-                    </div>
-                    <div class="schedule-day active">
-                        <div>FRI</div>
-                        <div class="day-label">Pull</div>
-                    </div>
-                    <div class="schedule-day rest">
-                        <div>SAT</div>
-                        <div class="day-label">Rest</div>
-                    </div>
-                    <div class="schedule-day rest">
-                        <div>SUN</div>
-                        <div class="day-label">Rest</div>
-                    </div>
-                </div>
-
-                <div class="day-card">
-                    <div class="day-header" onclick="toggleDay(this)">
-                        <div class="day-title">
-                            <span class="day-number">1</span>
-                            Upper Body Push + Core
-                        </div>
-                        <div class="expand-icon">+</div>
-                    </div>
-                    <div class="day-content">
-                        <div class="day-section">
-                            <div class="section-title">🔥 Warm-up (8-10 min)</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Arm Circles</div>
-                                <div class="exercise-details">30s each direction</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Band Pull-aparts</div>
-                                <div class="exercise-details">15 reps</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Scapular Push-ups</div>
-                                <div class="exercise-details">10 reps</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Dead Hangs</div>
-                                <div class="exercise-details">3 × 10-15s</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">💪 Main Workout</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Push-up Progression <span class="badge">COMPOUND</span></div>
-                                <div class="exercise-details">4 sets × 8-12 reps • Rest: 90s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Dumbbell Chest Press</div>
-                                <div class="exercise-details">4 × 10-12 • 3s negative • Rest: 90s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Dumbbell Shoulder Press</div>
-                                <div class="exercise-details">3 × 10-12 • Standing preferred • Rest: 60s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Lateral Raises</div>
-                                <div class="exercise-details">3 × 12-15 • Light weight • Rest: 60s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Tricep Extension (KB/DB)</div>
-                                <div class="exercise-details">3 × 12-15 • Overhead • Rest: 45s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Pike Push-ups</div>
-                                <div class="exercise-details">3 × 8-12 • Shoulder prep • Rest: 45s</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🎯 Core Circuit (3 rounds)</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Plank</div>
-                                <div class="exercise-details">30-45s hold</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Dead Bug</div>
-                                <div class="exercise-details">10 each side</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Hollow Body Hold</div>
-                                <div class="exercise-details">15-30s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Russian Twists (KB)</div>
-                                <div class="exercise-details">20 total reps</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🏃 Cardio Finisher</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Rowing Machine</div>
-                                <div class="exercise-details">5 min moderate pace</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🧘 Cool-down (5 min)</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Chest Doorway Stretch</div>
-                                <div class="exercise-details">30s each side</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Overhead Tricep Stretch</div>
-                                <div class="exercise-details">30s each arm</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Child's Pose</div>
-                                <div class="exercise-details">45s</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="day-card">
-                    <div class="day-header" onclick="toggleDay(this)">
-                        <div class="day-title">
-                            <span class="day-number">2</span>
-                            Lower Body + Posterior Chain
-                        </div>
-                        <div class="expand-icon">+</div>
-                    </div>
-                    <div class="day-content">
-                        <div class="day-section">
-                            <div class="section-title">🔥 Warm-up (8-10 min)</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Walk/Bike</div>
-                                <div class="exercise-details">5 min light</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Leg Swings</div>
-                                <div class="exercise-details">10 each direction, each leg</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Bodyweight Squats</div>
-                                <div class="exercise-details">15 reps</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Glute Bridges</div>
-                                <div class="exercise-details">15 reps</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">💪 Main Workout</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Goblet Squat <span class="badge">COMPOUND</span></div>
-                                <div class="exercise-details">4 × 10-12 • Hold KB at chest • Rest: 2 min</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Romanian Deadlift (KB/DB)</div>
-                                <div class="exercise-details">4 × 10-12 • Hip hinge pattern • Rest: 2 min</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Bulgarian Split Squat</div>
-                                <div class="exercise-details">3 × 8-10 each leg • Back foot elevated • Rest: 90s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Single-leg RDL</div>
-                                <div class="exercise-details">3 × 10 each • Balance work • Rest: 90s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Glute Bridge March</div>
-                                <div class="exercise-details">3 × 12-15 • Add DB weight • Rest: 60s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Calf Raises</div>
-                                <div class="exercise-details">3 × 15-20 • Full ROM • Rest: 45s</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🎯 Core - Anti-rotation</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Pallof Press (Band)</div>
-                                <div class="exercise-details">3 × 10 each side</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">OR Suitcase Carries</div>
-                                <div class="exercise-details">3 × 30s each side with KB</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🏃 Cardio Finisher</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Treadmill Intervals</div>
-                                <div class="exercise-details">2 min walk / 1 min jog × 3 rounds</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🧘 Cool-down (5 min)</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Standing Quad Stretch</div>
-                                <div class="exercise-details">30s each leg</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Pigeon Pose</div>
-                                <div class="exercise-details">30s each side</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="day-card">
-                    <div class="day-header" onclick="toggleDay(this)">
-                        <div class="day-title">
-                            <span class="day-number">3</span>
-                            Full Body Pull + Core
-                        </div>
-                        <div class="expand-icon">+</div>
-                    </div>
-                    <div class="day-content">
-                        <div class="day-section">
-                            <div class="section-title">🔥 Warm-up (8-10 min)</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Elliptical/Bike</div>
-                                <div class="exercise-details">5 min light</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Scapular Retractions</div>
-                                <div class="exercise-details">15 reps</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Band Rows</div>
-                                <div class="exercise-details">15 reps</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Dead Hangs</div>
-                                <div class="exercise-details">3 × 15s</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">💪 Main Workout</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Pull-up Progression <span class="badge">COMPOUND</span></div>
-                                <div class="exercise-details">5 sets • Band-assisted or negatives • Rest: 2 min</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Dumbbell Bent-Over Row</div>
-                                <div class="exercise-details">4 × 10-12 • Hip hinge position • Rest: 90s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Single-arm DB Row</div>
-                                <div class="exercise-details">3 × 10-12 each • Supported • Rest: 60s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Face Pulls (Band)</div>
-                                <div class="exercise-details">3 × 15-20 • Shoulder health • Rest: 60s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Dumbbell Bicep Curl</div>
-                                <div class="exercise-details">3 × 10-12 • Supinated grip • Rest: 45s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Hammer Curl</div>
-                                <div class="exercise-details">3 × 12-15 • Neutral grip • Rest: 45s</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Farmer's Carry</div>
-                                <div class="exercise-details">3 × 40s • Heavy KB/DB</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🎯 Core Finisher</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Hanging Knee Raises</div>
-                                <div class="exercise-details">3 × 8-12 (or lying leg raises)</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Plank to Downward Dog</div>
-                                <div class="exercise-details">3 × 10 reps</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Side Plank</div>
-                                <div class="exercise-details">2 × 30s each side</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🏃 Cardio Finisher</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Bike HIIT</div>
-                                <div class="exercise-details">30s fast / 90s easy × 5 rounds</div>
-                            </div>
-                        </div>
-
-                        <div class="day-section">
-                            <div class="section-title">🧘 Cool-down (5 min)</div>
-                            <div class="exercise">
-                                <div class="exercise-name">Lat Stretch (Pull-up Bar)</div>
-                                <div class="exercise-details">30s each side</div>
-                            </div>
-                            <div class="exercise">
-                                <div class="exercise-name">Cobra Stretch</div>
-                                <div class="exercise-details">45s</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="workoutPlansList"></div>
             </div>
 
-            <!-- 4-DAY SPLIT -->
-            <div class="workout-split" id="4day">
-                <div class="info-box">
-                    <div class="info-title">💪 4-Day Split Overview</div>
-                    <div class="info-text">
-                        <strong>Best for:</strong> Balanced recovery, moderate volume per session<br>
-                        <strong>Pattern:</strong> Mon/Tue/Thu/Fri or every other day rolling
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">📋 Full 4-Day workouts available in original document</div>
-                    <div class="info-text">
-                        The complete 4-day split with all exercises, sets, and reps is in your downloaded markdown file. Use the tracker tab to log your workouts!
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5-DAY SPLIT -->
-            <div class="workout-split" id="5day">
-                <div class="info-box">
-                    <div class="info-title">💪 5-Day Split Overview</div>
-                    <div class="info-text">
-                        <strong>Best for:</strong> Maximum frequency, fastest progress<br>
-                        <strong>Pattern:</strong> Weekdays on, weekends off
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-title">📋 Full 5-Day workouts available in original document</div>
-                    <div class="info-text">
-                        The complete 5-day split with all exercises, sets, and reps is in your downloaded markdown file. Use the tracker tab to log your workouts!
-                    </div>
-                </div>
-            </div>
+            <!-- TRACKING VIEW -->
+            <div id="trackingView"></div>
 
             <!-- PROGRESSIONS -->
             <div class="workout-split" id="progression">
@@ -1438,6 +1291,27 @@
         </div>
     </div>
 
+    <!-- New Plan Modal -->
+    <div class="modal" id="newPlanModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="newPlanModalTitle">New Plan</div>
+                <button class="close-modal" onclick="closeNewPlanModal()">×</button>
+            </div>
+
+            <form id="planForm">
+                <div class="form-group">
+                    <label class="form-label">Plan Name</label>
+                    <input type="text" class="form-input" id="planName" placeholder="e.g., Day 1 – Upper Body" required>
+                </div>
+
+                <div id="planSectionsContainer"></div>
+
+                <button type="submit" class="save-workout-btn">Save Plan</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Initialize with today's date
         document.addEventListener('DOMContentLoaded', function() {
@@ -1445,7 +1319,15 @@
             document.getElementById('workoutDate').value = today;
             loadWorkoutHistory();
             updateProgressStats();
-            
+            loadWorkoutPlans();
+
+            const activeSession = loadActiveSession();
+            if (activeSession) {
+                enterTrackingView();
+            } else {
+                renderWorkoutList();
+            }
+
             // Add first exercise by default when modal opens
             setTimeout(() => {
                 if (document.querySelectorAll('.exercise-entry').length === 0) {
@@ -1476,6 +1358,548 @@
             const card = element.closest('.day-card');
             card.classList.toggle('expanded');
         }
+
+        // ===================== WORKOUT PLANS =====================
+
+        const SEED_PLANS = [
+            {
+                id: 1,
+                name: 'Day 1 – Upper Body Push + Core',
+                favorite: false,
+                sections: [
+                    { title: 'Warm-up', icon: '🔥', loggable: false, exercises: [
+                        { name: 'Arm Circles', prescribed: '30s each direction' },
+                        { name: 'Band Pull-aparts', prescribed: '15 reps' },
+                        { name: 'Scapular Push-ups', prescribed: '10 reps' },
+                        { name: 'Dead Hangs', prescribed: '3 × 10-15s' }
+                    ] },
+                    { title: 'Main Workout', icon: '💪', loggable: true, exercises: [
+                        { name: 'Push-up Progression', prescribed: '4 × 8-12 • Rest: 90s' },
+                        { name: 'Dumbbell Chest Press', prescribed: '4 × 10-12 • 3s negative • Rest: 90s' },
+                        { name: 'Dumbbell Shoulder Press', prescribed: '3 × 10-12 • Rest: 60s' },
+                        { name: 'Lateral Raises', prescribed: '3 × 12-15 • Rest: 60s' },
+                        { name: 'Tricep Extension (KB/DB)', prescribed: '3 × 12-15 • Rest: 45s' },
+                        { name: 'Pike Push-ups', prescribed: '3 × 8-12 • Rest: 45s' },
+                        { name: 'Plank', prescribed: '30-45s hold' },
+                        { name: 'Dead Bug', prescribed: '10 each side' },
+                        { name: 'Hollow Body Hold', prescribed: '15-30s' },
+                        { name: 'Russian Twists (KB)', prescribed: '20 total reps' }
+                    ] },
+                    { title: 'Cardio Finisher', icon: '🏃', loggable: true, exercises: [
+                        { name: 'Rowing Machine', prescribed: '5 min moderate pace' }
+                    ] },
+                    { title: 'Cool-down', icon: '🧘', loggable: false, exercises: [
+                        { name: 'Chest Doorway Stretch', prescribed: '30s each side' },
+                        { name: 'Overhead Tricep Stretch', prescribed: '30s each arm' },
+                        { name: "Child's Pose", prescribed: '45s' }
+                    ] }
+                ]
+            },
+            {
+                id: 2,
+                name: 'Day 2 – Lower Body + Posterior Chain',
+                favorite: false,
+                sections: [
+                    { title: 'Warm-up', icon: '🔥', loggable: false, exercises: [
+                        { name: 'Walk/Bike', prescribed: '5 min light' },
+                        { name: 'Leg Swings', prescribed: '10 each direction, each leg' },
+                        { name: 'Bodyweight Squats', prescribed: '15 reps' },
+                        { name: 'Glute Bridges', prescribed: '15 reps' }
+                    ] },
+                    { title: 'Main Workout', icon: '💪', loggable: true, exercises: [
+                        { name: 'Goblet Squat', prescribed: '4 × 10-12 • Rest: 2 min' },
+                        { name: 'Romanian Deadlift (KB/DB)', prescribed: '4 × 10-12 • Rest: 2 min' },
+                        { name: 'Bulgarian Split Squat', prescribed: '3 × 8-10 each leg • Rest: 90s' },
+                        { name: 'Single-leg RDL', prescribed: '3 × 10 each • Rest: 90s' },
+                        { name: 'Glute Bridge March', prescribed: '3 × 12-15 • Rest: 60s' },
+                        { name: 'Calf Raises', prescribed: '3 × 15-20 • Rest: 45s' },
+                        { name: 'Pallof Press (Band)', prescribed: '3 × 10 each side' },
+                        { name: 'OR Suitcase Carries', prescribed: '3 × 30s each side with KB' }
+                    ] },
+                    { title: 'Cardio Finisher', icon: '🏃', loggable: true, exercises: [
+                        { name: 'Treadmill Intervals', prescribed: '2 min walk / 1 min jog × 3 rounds' }
+                    ] },
+                    { title: 'Cool-down', icon: '🧘', loggable: false, exercises: [
+                        { name: 'Standing Quad Stretch', prescribed: '30s each leg' },
+                        { name: 'Pigeon Pose', prescribed: '30s each side' }
+                    ] }
+                ]
+            },
+            {
+                id: 3,
+                name: 'Day 3 – Full Body Pull + Core',
+                favorite: false,
+                sections: [
+                    { title: 'Warm-up', icon: '🔥', loggable: false, exercises: [
+                        { name: 'Elliptical/Bike', prescribed: '5 min light' },
+                        { name: 'Scapular Retractions', prescribed: '15 reps' },
+                        { name: 'Band Rows', prescribed: '15 reps' },
+                        { name: 'Dead Hangs', prescribed: '3 × 15s' }
+                    ] },
+                    { title: 'Main Workout', icon: '💪', loggable: true, exercises: [
+                        { name: 'Pull-up Progression', prescribed: '5 sets • Rest: 2 min' },
+                        { name: 'Dumbbell Bent-Over Row', prescribed: '4 × 10-12 • Rest: 90s' },
+                        { name: 'Single-arm DB Row', prescribed: '3 × 10-12 each • Rest: 60s' },
+                        { name: 'Face Pulls (Band)', prescribed: '3 × 15-20 • Rest: 60s' },
+                        { name: 'Dumbbell Bicep Curl', prescribed: '3 × 10-12 • Rest: 45s' },
+                        { name: 'Hammer Curl', prescribed: '3 × 12-15 • Rest: 45s' },
+                        { name: "Farmer's Carry", prescribed: '3 × 40s' },
+                        { name: 'Hanging Knee Raises', prescribed: '3 × 8-12' },
+                        { name: 'Plank to Downward Dog', prescribed: '3 × 10 reps' },
+                        { name: 'Side Plank', prescribed: '2 × 30s each side' }
+                    ] },
+                    { title: 'Cardio Finisher', icon: '🏃', loggable: true, exercises: [
+                        { name: 'Bike HIIT', prescribed: '30s fast / 90s easy × 5 rounds' }
+                    ] },
+                    { title: 'Cool-down', icon: '🧘', loggable: false, exercises: [
+                        { name: 'Lat Stretch (Pull-up Bar)', prescribed: '30s each side' },
+                        { name: 'Cobra Stretch', prescribed: '45s' }
+                    ] }
+                ]
+            }
+        ];
+
+        const PLAN_SECTION_TYPES = [
+            { title: 'Warm-up', icon: '🔥', loggable: false },
+            { title: 'Main Workout', icon: '💪', loggable: true },
+            { title: 'Cardio Finisher', icon: '🏃', loggable: true },
+            { title: 'Cool-down', icon: '🧘', loggable: false }
+        ];
+
+        function loadWorkoutPlans() {
+            let plans = JSON.parse(localStorage.getItem('workoutPlans') || 'null');
+            if (!plans) {
+                plans = SEED_PLANS;
+                saveWorkoutPlans(plans);
+            }
+            return plans;
+        }
+
+        function saveWorkoutPlans(plans) {
+            localStorage.setItem('workoutPlans', JSON.stringify(plans));
+        }
+
+        let favoritesOnly = false;
+        let editingPlanId = null;
+        let planExerciseRowCount = 0;
+
+        window.toggleFavoritesFilter = function() {
+            favoritesOnly = !favoritesOnly;
+            document.getElementById('favFilterChip').classList.toggle('active', favoritesOnly);
+            renderWorkoutList();
+        }
+
+        function renderWorkoutList() {
+            const plans = loadWorkoutPlans();
+            const visible = favoritesOnly ? plans.filter(p => p.favorite) : plans;
+            const container = document.getElementById('workoutPlansList');
+
+            if (visible.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🏋️</div>
+                        <div class="empty-state-text">${favoritesOnly ? 'No favorite plans yet.' : 'No plans yet.<br>Tap "+ New Plan" to create one!'}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = visible.map(plan => `
+                <div class="day-card">
+                    <div class="day-header" onclick="toggleDay(this)">
+                        <div class="day-title">${plan.name}</div>
+                        <div class="day-header-controls">
+                            <button class="favorite-star ${plan.favorite ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite(${plan.id})">${plan.favorite ? '★' : '☆'}</button>
+                            <button class="start-btn" onclick="event.stopPropagation(); startWorkout(${plan.id})">Start</button>
+                            <div class="expand-icon">+</div>
+                        </div>
+                    </div>
+                    <div class="day-content">
+                        ${plan.sections.map(section => `
+                            <div class="day-section">
+                                <div class="section-title">${section.icon} ${section.title}</div>
+                                ${section.exercises.map(ex => `
+                                    <div class="exercise">
+                                        <div class="exercise-name">${ex.name}</div>
+                                        <div class="exercise-details">${ex.prescribed || ''}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `).join('')}
+                        <div style="padding: 0 1.25rem 1.25rem; display:flex; gap:0.5rem;">
+                            <button class="start-btn" style="flex:1;" onclick="event.stopPropagation(); editPlan(${plan.id})">Edit</button>
+                            <button class="delete-workout" style="flex:1;" onclick="event.stopPropagation(); deletePlan(${plan.id})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.toggleFavorite = function(id) {
+            const plans = loadWorkoutPlans();
+            const plan = plans.find(p => p.id === id);
+            if (!plan) return;
+            plan.favorite = !plan.favorite;
+            saveWorkoutPlans(plans);
+            renderWorkoutList();
+        }
+
+        window.deletePlan = function(id) {
+            const confirmed = confirm('Delete this plan?');
+            if (!confirmed) return;
+            let plans = loadWorkoutPlans();
+            plans = plans.filter(p => p.id !== id);
+            saveWorkoutPlans(plans);
+            renderWorkoutList();
+        }
+
+        window.openNewPlanModal = function(plan) {
+            editingPlanId = plan ? plan.id : null;
+            document.getElementById('newPlanModalTitle').textContent = plan ? 'Edit Plan' : 'New Plan';
+            document.getElementById('planName').value = plan ? plan.name : '';
+
+            const container = document.getElementById('planSectionsContainer');
+            container.innerHTML = '';
+            planExerciseRowCount = 0;
+
+            PLAN_SECTION_TYPES.forEach((sectionType, sectionIndex) => {
+                const block = document.createElement('div');
+                block.className = 'exercise-entry';
+                block.innerHTML = `
+                    <div class="exercise-entry-header">
+                        <label class="form-label">${sectionType.icon} ${sectionType.title}</label>
+                    </div>
+                    <div id="planSection-${sectionIndex}-rows"></div>
+                    <button type="button" class="add-exercise-btn" onclick="addPlanExercise(${sectionIndex})">+ Add Exercise</button>
+                `;
+                container.appendChild(block);
+
+                const existingExercises = plan ? plan.sections[sectionIndex].exercises : [];
+                if (existingExercises.length > 0) {
+                    existingExercises.forEach(ex => addPlanExercise(sectionIndex, ex.name, ex.prescribed));
+                }
+            });
+
+            document.getElementById('newPlanModal').classList.add('active');
+        }
+
+        window.closeNewPlanModal = function() {
+            document.getElementById('newPlanModal').classList.remove('active');
+            document.getElementById('planForm').reset();
+            editingPlanId = null;
+        }
+
+        window.addPlanExercise = function(sectionIndex, name, prescribed) {
+            planExerciseRowCount++;
+            const rowId = planExerciseRowCount;
+            const rowsContainer = document.getElementById(`planSection-${sectionIndex}-rows`);
+            const row = document.createElement('div');
+            row.className = 'set-input';
+            row.id = `planRow-${sectionIndex}-${rowId}`;
+            row.innerHTML = `
+                <input type="text" class="form-input" placeholder="Exercise name" id="planExName-${sectionIndex}-${rowId}" value="${name ? name.replace(/"/g, '&quot;') : ''}" required>
+                <input type="text" class="form-input" placeholder="e.g. 3x12" id="planExPrescribed-${sectionIndex}-${rowId}" value="${prescribed ? prescribed.replace(/"/g, '&quot;') : ''}">
+                <button type="button" class="remove-exercise" onclick="removePlanExercise(${sectionIndex}, ${rowId})">×</button>
+            `;
+            rowsContainer.appendChild(row);
+        }
+
+        window.removePlanExercise = function(sectionIndex, rowId) {
+            const row = document.getElementById(`planRow-${sectionIndex}-${rowId}`);
+            if (row) row.remove();
+        }
+
+        window.savePlan = function() {
+            const name = document.getElementById('planName').value;
+            const sections = PLAN_SECTION_TYPES.map((sectionType, sectionIndex) => {
+                const rowsContainer = document.getElementById(`planSection-${sectionIndex}-rows`);
+                const exercises = [];
+                rowsContainer.querySelectorAll('.set-input').forEach(row => {
+                    const nameInput = row.querySelector('input[id^="planExName-"]');
+                    const prescribedInput = row.querySelector('input[id^="planExPrescribed-"]');
+                    if (nameInput && nameInput.value) {
+                        exercises.push({ name: nameInput.value, prescribed: prescribedInput.value || '' });
+                    }
+                });
+                return { title: sectionType.title, icon: sectionType.icon, loggable: sectionType.loggable, exercises };
+            });
+
+            let plans = loadWorkoutPlans();
+            if (editingPlanId) {
+                const idx = plans.findIndex(p => p.id === editingPlanId);
+                if (idx !== -1) {
+                    plans[idx] = { ...plans[idx], name, sections };
+                }
+            } else {
+                plans.push({ id: Date.now(), name, favorite: false, sections });
+            }
+            saveWorkoutPlans(plans);
+            closeNewPlanModal();
+            renderWorkoutList();
+        }
+
+        window.editPlan = function(id) {
+            const plans = loadWorkoutPlans();
+            const plan = plans.find(p => p.id === id);
+            if (!plan) return;
+            openNewPlanModal(plan);
+        }
+
+        // ===================== TRACKING MODE =====================
+
+        function loadActiveSession() {
+            return JSON.parse(localStorage.getItem('activeSession') || 'null');
+        }
+
+        function saveActiveSession(session) {
+            localStorage.setItem('activeSession', JSON.stringify(session));
+        }
+
+        window.startWorkout = function(planId) {
+            const session = {
+                planId: planId,
+                startedAt: Date.now(),
+                loggedSets: {}
+            };
+            saveActiveSession(session);
+            enterTrackingView();
+        }
+
+        function enterTrackingView() {
+            const session = loadActiveSession();
+            if (!session) return;
+
+            const plans = loadWorkoutPlans();
+            const plan = plans.find(p => p.id === session.planId);
+            document.body.classList.add('tracking-active');
+
+            const container = document.getElementById('trackingView');
+            if (!plan) {
+                container.innerHTML = `<div class="empty-state">Plan no longer exists.</div>
+                    <button class="tracking-end-btn" onclick="endWorkout()">End</button>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="tracking-end-bar">
+                    <div class="tracking-plan-title">${plan.name}</div>
+                    <button class="tracking-end-btn" onclick="endWorkout()">End</button>
+                </div>
+                ${plan.sections.map(section => `
+                    <div class="day-section">
+                        <div class="section-title">${section.icon} ${section.title}</div>
+                        ${section.exercises.map(ex => renderTrackingExercise(ex, section.loggable, session)).join('')}
+                    </div>
+                `).join('')}
+                <div class="rest-timer-slot" id="restTimerSlot"></div>
+            `;
+            renderRestTimerSlot();
+        }
+
+        function renderTrackingExercise(ex, loggable, session) {
+            if (!loggable) {
+                return `
+                    <div class="exercise">
+                        <div class="exercise-name">${ex.name}</div>
+                        <div class="exercise-details">${ex.prescribed || ''}</div>
+                    </div>
+                `;
+            }
+
+            const safeName = ex.name.replace(/'/g, "\\'");
+            const logged = session.loggedSets[ex.name];
+            const weight = logged ? logged.weight : '';
+            const reps = logged ? logged.reps : [];
+
+            return `
+                <div class="tracking-exercise" id="trackEx-${cssSafe(ex.name)}">
+                    <div class="exercise-name">${ex.name}</div>
+                    <div class="exercise-details">${ex.prescribed || ''}</div>
+                    <div class="form-group" style="margin: 0.5rem 0;">
+                        <input type="number" class="form-input" placeholder="Weight (kg, optional)" step="0.5"
+                            id="trackWeight-${cssSafe(ex.name)}" value="${weight}"
+                            onchange="updateExerciseWeight('${safeName}', this.value)">
+                    </div>
+                    <div class="set-log-list" id="trackSets-${cssSafe(ex.name)}">
+                        ${reps.map((r, i) => `<span class="set-log-chip">Set ${i + 1}: ${r} reps</span>`).join('')}
+                    </div>
+                    <div class="log-set-row">
+                        <input type="number" placeholder="Reps" id="trackReps-${cssSafe(ex.name)}">
+                        <button type="button" onclick="submitLogSet('${safeName}')">+ Add Set</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function cssSafe(name) {
+            return name.replace(/[^a-zA-Z0-9]/g, '_');
+        }
+
+        window.updateExerciseWeight = function(exerciseName, value) {
+            const session = loadActiveSession();
+            if (!session) return;
+            if (!session.loggedSets[exerciseName]) {
+                session.loggedSets[exerciseName] = { weight: value ? parseFloat(value) : null, reps: [] };
+            } else {
+                session.loggedSets[exerciseName].weight = value ? parseFloat(value) : null;
+            }
+            saveActiveSession(session);
+        }
+
+        window.submitLogSet = function(exerciseName) {
+            const repsInput = document.getElementById(`trackReps-${cssSafe(exerciseName)}`);
+            const reps = parseInt(repsInput.value);
+            if (!reps) return;
+            logSet(exerciseName, reps);
+            repsInput.value = '';
+        }
+
+        window.logSet = function(exerciseName, reps) {
+            const session = loadActiveSession();
+            if (!session) return;
+
+            if (!session.loggedSets[exerciseName]) {
+                const weightInput = document.getElementById(`trackWeight-${cssSafe(exerciseName)}`);
+                const weight = weightInput && weightInput.value ? parseFloat(weightInput.value) : null;
+                session.loggedSets[exerciseName] = { weight, reps: [] };
+            }
+            session.loggedSets[exerciseName].reps.push(reps);
+            saveActiveSession(session);
+
+            const setsContainer = document.getElementById(`trackSets-${cssSafe(exerciseName)}`);
+            if (setsContainer) {
+                const repsArr = session.loggedSets[exerciseName].reps;
+                setsContainer.innerHTML = repsArr.map((r, i) => `<span class="set-log-chip">Set ${i + 1}: ${r} reps</span>`).join('');
+            }
+
+            showRestTimerPrompt();
+        }
+
+        window.endWorkout = function() {
+            const session = loadActiveSession();
+            if (!session) return;
+
+            const hasLoggedSets = Object.keys(session.loggedSets).length > 0;
+            if (hasLoggedSets) {
+                const plans = loadWorkoutPlans();
+                const plan = plans.find(p => p.id === session.planId);
+                const workout = {
+                    id: Date.now(),
+                    type: plan ? plan.name : 'Workout',
+                    date: new Date().toISOString().split('T')[0],
+                    exercises: Object.entries(session.loggedSets).map(([name, data]) => ({
+                        name,
+                        weight: data.weight,
+                        sets: data.reps
+                    }))
+                };
+                let workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+                workouts.unshift(workout);
+                localStorage.setItem('workouts', JSON.stringify(workouts));
+            }
+
+            localStorage.removeItem('activeSession');
+            stopRestTimer();
+            document.body.classList.remove('tracking-active');
+            document.getElementById('trackingView').innerHTML = '';
+            renderWorkoutList();
+            loadWorkoutHistory();
+            updateProgressStats();
+        }
+
+        // ===================== REST TIMER =====================
+
+        let restTimerInterval = null;
+        let restTimerRemaining = 0;
+
+        function renderRestTimerSlot() {
+            const slot = document.getElementById('restTimerSlot');
+            if (!slot) return;
+            slot.innerHTML = `
+                <div class="rest-timer-presets">
+                    <button type="button" class="rest-preset-btn" onclick="startRestTimer(30)">30s</button>
+                    <button type="button" class="rest-preset-btn" onclick="startRestTimer(60)">60s</button>
+                    <button type="button" class="rest-preset-btn" onclick="startRestTimer(90)">90s</button>
+                    <input type="number" class="rest-custom-input" id="customRestSeconds" placeholder="sec">
+                    <button type="button" class="rest-preset-btn" onclick="startCustomRestTimer()">Start</button>
+                </div>
+            `;
+        }
+
+        function showRestTimerPrompt() {
+            renderRestTimerSlot();
+        }
+
+        window.startCustomRestTimer = function() {
+            const input = document.getElementById('customRestSeconds');
+            const seconds = parseInt(input.value);
+            if (!seconds || seconds <= 0) return;
+            startRestTimer(seconds);
+        }
+
+        window.startRestTimer = function(seconds) {
+            if (restTimerInterval) {
+                clearInterval(restTimerInterval);
+            }
+            restTimerRemaining = seconds;
+            renderRestTimerCountdown();
+            restTimerInterval = setInterval(() => {
+                restTimerRemaining--;
+                if (restTimerRemaining <= 0) {
+                    finishRestTimer();
+                } else {
+                    renderRestTimerCountdown();
+                }
+            }, 1000);
+        }
+
+        function renderRestTimerCountdown() {
+            const slot = document.getElementById('restTimerSlot');
+            if (!slot) return;
+            const mm = Math.floor(restTimerRemaining / 60).toString().padStart(2, '0');
+            const ss = (restTimerRemaining % 60).toString().padStart(2, '0');
+            slot.innerHTML = `
+                <div class="rest-timer-countdown">${mm}:${ss}</div>
+                <button type="button" class="rest-cancel-btn" onclick="stopRestTimer()">Cancel</button>
+            `;
+        }
+
+        function stopRestTimer() {
+            if (restTimerInterval) {
+                clearInterval(restTimerInterval);
+                restTimerInterval = null;
+            }
+            renderRestTimerSlot();
+        }
+
+        function finishRestTimer() {
+            clearInterval(restTimerInterval);
+            restTimerInterval = null;
+            renderRestTimerSlot();
+
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = ctx.createOscillator();
+                const gain = ctx.createGain();
+                oscillator.connect(gain);
+                gain.connect(ctx.destination);
+                oscillator.frequency.value = 880;
+                gain.gain.value = 0.2;
+                oscillator.start();
+                oscillator.stop(ctx.currentTime + 0.3);
+            } catch (e) {
+                // AudioContext unsupported or blocked - degrade gracefully
+            }
+
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
+            }
+        }
+
+        document.getElementById('planForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            savePlan();
+        });
 
         // Modal functions - make globally accessible
         window.openAddWorkoutModal = function() {
