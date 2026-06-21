@@ -22,3 +22,11 @@ Verified with the jsdom harness (including real `setTimeout`-driven countdown ti
 - Letting the replacement timer run to completion: the slot reverts to `.rest-timer-presets`, and the Web Audio stub's call counter (`__audioCtxCount`) is exactly `1` — confirming the beep fires once for the completed timer and not again for the earlier, replaced one.
 
 **Tracked in:** Design #11, Build #16 (sub-issues #33–#35).
+
+## Follow-up fix: silent beep on mobile (#38)
+
+The beep didn't fire on mobile. Root cause: `finishRestTimer()` created its `AudioContext` asynchronously inside the `setInterval` tick that detects the countdown hitting zero — not inside a direct user gesture. Mobile browsers suspend `AudioContext`s created outside a user gesture, and the surrounding `try/catch` swallowed the failure silently.
+
+Fix: `startRestTimer()` (called directly from the preset/Start button click, a real user gesture) now creates/resumes a module-level `restTimerAudioCtx` up front; `finishRestTimer()` reuses that already-unlocked context instead of creating a new one. Verified via the jsdom harness (32/32 assertions, including the existing single-beep test) — real-device audio output isn't observable in jsdom, so this still wants a manual mobile check.
+
+**Tracked in:** Issue #38, PR #41.
