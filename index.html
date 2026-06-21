@@ -1794,22 +1794,18 @@
 
             const safeName = ex.name.replace(/'/g, "\\'");
             const logged = session.loggedSets[ex.name];
-            const weight = logged ? logged.weight : '';
             const reps = logged ? logged.reps : [];
+            const weights = logged ? logged.weights : [];
 
             return `
                 <div class="tracking-exercise" id="trackEx-${cssSafe(ex.name)}">
                     <div class="exercise-name">${ex.name}</div>
                     <div class="exercise-details">${ex.prescribed || ''}</div>
-                    <div class="form-group" style="margin: 0.5rem 0;">
-                        <input type="number" class="form-input" placeholder="Weight (kg, optional)" step="0.5"
-                            id="trackWeight-${cssSafe(ex.name)}" value="${weight}"
-                            onchange="updateExerciseWeight('${safeName}', this.value)">
-                    </div>
                     <div class="set-log-list" id="trackSets-${cssSafe(ex.name)}">
-                        ${renderSetChips(safeName, reps)}
+                        ${renderSetChips(safeName, reps, weights)}
                     </div>
                     <div class="log-set-row">
+                        <input type="number" placeholder="Weight (kg)" step="0.5" id="trackSetWeight-${cssSafe(ex.name)}">
                         <input type="number" placeholder="Reps" id="trackReps-${cssSafe(ex.name)}">
                         <button type="button" onclick="submitLogSet('${safeName}')">+ Add Set</button>
                     </div>
@@ -1821,54 +1817,49 @@
             return name.replace(/[^a-zA-Z0-9]/g, '_');
         }
 
-        function renderSetChips(safeName, reps) {
-            return reps.map((r, i) => `
+        function renderSetChips(safeName, reps, weights) {
+            return reps.map((r, i) => {
+                const w = weights[i];
+                const label = w ? `Set ${i + 1}: ${r} reps @ ${w}kg` : `Set ${i + 1}: ${r} reps`;
+                return `
                 <span class="set-log-chip">
-                    <span class="set-log-chip-label" onclick="editLoggedSet('${safeName}', ${i})">Set ${i + 1}: ${r} reps</span>
+                    <span class="set-log-chip-label" onclick="editLoggedSet('${safeName}', ${i})">${label}</span>
                     <button type="button" class="set-log-chip-remove" onclick="deleteLoggedSet('${safeName}', ${i})">×</button>
                 </span>
-            `).join('');
-        }
-
-        window.updateExerciseWeight = function(exerciseName, value) {
-            const session = loadActiveSession();
-            if (!session) return;
-            if (!session.loggedSets[exerciseName]) {
-                session.loggedSets[exerciseName] = { weight: value ? parseFloat(value) : null, reps: [] };
-            } else {
-                session.loggedSets[exerciseName].weight = value ? parseFloat(value) : null;
-            }
-            saveActiveSession(session);
+            `;
+            }).join('');
         }
 
         window.submitLogSet = function(exerciseName) {
             const repsInput = document.getElementById(`trackReps-${cssSafe(exerciseName)}`);
+            const weightInput = document.getElementById(`trackSetWeight-${cssSafe(exerciseName)}`);
             const reps = parseInt(repsInput.value);
             if (!reps) return;
-            logSet(exerciseName, reps);
+            const weight = weightInput.value ? parseFloat(weightInput.value) : null;
+            logSet(exerciseName, reps, weight);
             repsInput.value = '';
+            weightInput.value = '';
         }
 
-        window.logSet = function(exerciseName, reps) {
+        window.logSet = function(exerciseName, reps, weight) {
             const session = loadActiveSession();
             if (!session) return;
 
             if (!session.loggedSets[exerciseName]) {
-                const weightInput = document.getElementById(`trackWeight-${cssSafe(exerciseName)}`);
-                const weight = weightInput && weightInput.value ? parseFloat(weightInput.value) : null;
-                session.loggedSets[exerciseName] = { weight, reps: [] };
+                session.loggedSets[exerciseName] = { reps: [], weights: [] };
             }
             session.loggedSets[exerciseName].reps.push(reps);
+            session.loggedSets[exerciseName].weights.push(weight);
             saveActiveSession(session);
 
-            renderSetChipsInto(exerciseName, session.loggedSets[exerciseName].reps);
+            renderSetChipsInto(exerciseName, session.loggedSets[exerciseName].reps, session.loggedSets[exerciseName].weights);
             showRestTimerPrompt();
         }
 
-        function renderSetChipsInto(exerciseName, reps) {
+        function renderSetChipsInto(exerciseName, reps, weights) {
             const setsContainer = document.getElementById(`trackSets-${cssSafe(exerciseName)}`);
             if (setsContainer) {
-                setsContainer.innerHTML = renderSetChips(exerciseName.replace(/'/g, "\\'"), reps);
+                setsContainer.innerHTML = renderSetChips(exerciseName.replace(/'/g, "\\'"), reps, weights);
             }
         }
 
@@ -1878,14 +1869,19 @@
             const logged = session.loggedSets[exerciseName];
             if (!logged || logged.reps[index] === undefined) return;
 
-            const newValue = prompt('Edit reps for this set:', logged.reps[index]);
-            if (newValue === null) return;
-            const reps = parseInt(newValue);
+            const newReps = prompt('Edit reps for this set:', logged.reps[index]);
+            if (newReps === null) return;
+            const reps = parseInt(newReps);
             if (!reps || reps <= 0) return;
 
+            const newWeight = prompt('Edit weight (kg) for this set, leave blank for none:', logged.weights[index] || '');
+            if (newWeight === null) return;
+            const weight = newWeight ? parseFloat(newWeight) : null;
+
             logged.reps[index] = reps;
+            logged.weights[index] = weight;
             saveActiveSession(session);
-            renderSetChipsInto(exerciseName, logged.reps);
+            renderSetChipsInto(exerciseName, logged.reps, logged.weights);
         }
 
         window.deleteLoggedSet = function(exerciseName, index) {
@@ -1895,8 +1891,9 @@
             if (!logged) return;
 
             logged.reps.splice(index, 1);
+            logged.weights.splice(index, 1);
             saveActiveSession(session);
-            renderSetChipsInto(exerciseName, logged.reps);
+            renderSetChipsInto(exerciseName, logged.reps, logged.weights);
         }
 
         window.endWorkout = function() {
@@ -1913,8 +1910,8 @@
                     date: new Date().toISOString().split('T')[0],
                     exercises: Object.entries(session.loggedSets).map(([name, data]) => ({
                         name,
-                        weight: data.weight,
-                        sets: data.reps
+                        sets: data.reps,
+                        weights: data.weights
                     }))
                 };
                 let workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
@@ -2185,14 +2182,28 @@
                         </div>
                         <button class="delete-workout" onclick="deleteWorkout(${workout.id})">Delete</button>
                     </div>
-                    ${workout.exercises.map(ex => `
-                        <div class="exercise-log">
-                            <div class="exercise-log-name">${ex.name}${ex.weight ? ` • ${ex.weight}kg` : ''}</div>
-                            <div class="exercise-log-sets">${ex.sets.join(', ')} reps (${ex.sets.reduce((a, b) => a + b, 0)} total)</div>
-                        </div>
-                    `).join('')}
+                    ${workout.exercises.map(renderExerciseLog).join('')}
                 </div>
             `).join('');
+        }
+
+        function renderExerciseLog(ex) {
+            const total = ex.sets.reduce((a, b) => a + b, 0);
+            if (ex.weights) {
+                const perSet = ex.sets.map((r, i) => ex.weights[i] ? `${r} reps @ ${ex.weights[i]}kg` : `${r} reps`).join(', ');
+                return `
+                    <div class="exercise-log">
+                        <div class="exercise-log-name">${ex.name}</div>
+                        <div class="exercise-log-sets">${perSet} (${total} total)</div>
+                    </div>
+                `;
+            }
+            return `
+                <div class="exercise-log">
+                    <div class="exercise-log-name">${ex.name}${ex.weight ? ` • ${ex.weight}kg` : ''}</div>
+                    <div class="exercise-log-sets">${ex.sets.join(', ')} reps (${total} total)</div>
+                </div>
+            `;
         }
 
         // Delete workout
