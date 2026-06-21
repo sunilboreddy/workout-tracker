@@ -878,6 +878,9 @@
         }
 
         .set-log-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 6px;
@@ -885,6 +888,24 @@
             font-size: 0.8rem;
             font-family: 'JetBrains Mono', monospace;
             color: var(--text-secondary);
+        }
+
+        .set-log-chip-label {
+            cursor: pointer;
+        }
+
+        .set-log-chip-label:hover {
+            color: var(--accent-primary);
+        }
+
+        .set-log-chip-remove {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
         }
 
         .log-set-row {
@@ -1786,7 +1807,7 @@
                             onchange="updateExerciseWeight('${safeName}', this.value)">
                     </div>
                     <div class="set-log-list" id="trackSets-${cssSafe(ex.name)}">
-                        ${reps.map((r, i) => `<span class="set-log-chip">Set ${i + 1}: ${r} reps</span>`).join('')}
+                        ${renderSetChips(safeName, reps)}
                     </div>
                     <div class="log-set-row">
                         <input type="number" placeholder="Reps" id="trackReps-${cssSafe(ex.name)}">
@@ -1798,6 +1819,15 @@
 
         function cssSafe(name) {
             return name.replace(/[^a-zA-Z0-9]/g, '_');
+        }
+
+        function renderSetChips(safeName, reps) {
+            return reps.map((r, i) => `
+                <span class="set-log-chip">
+                    <span class="set-log-chip-label" onclick="editLoggedSet('${safeName}', ${i})">Set ${i + 1}: ${r} reps</span>
+                    <button type="button" class="set-log-chip-remove" onclick="deleteLoggedSet('${safeName}', ${i})">×</button>
+                </span>
+            `).join('');
         }
 
         window.updateExerciseWeight = function(exerciseName, value) {
@@ -1831,13 +1861,42 @@
             session.loggedSets[exerciseName].reps.push(reps);
             saveActiveSession(session);
 
+            renderSetChipsInto(exerciseName, session.loggedSets[exerciseName].reps);
+            showRestTimerPrompt();
+        }
+
+        function renderSetChipsInto(exerciseName, reps) {
             const setsContainer = document.getElementById(`trackSets-${cssSafe(exerciseName)}`);
             if (setsContainer) {
-                const repsArr = session.loggedSets[exerciseName].reps;
-                setsContainer.innerHTML = repsArr.map((r, i) => `<span class="set-log-chip">Set ${i + 1}: ${r} reps</span>`).join('');
+                setsContainer.innerHTML = renderSetChips(exerciseName.replace(/'/g, "\\'"), reps);
             }
+        }
 
-            showRestTimerPrompt();
+        window.editLoggedSet = function(exerciseName, index) {
+            const session = loadActiveSession();
+            if (!session) return;
+            const logged = session.loggedSets[exerciseName];
+            if (!logged || logged.reps[index] === undefined) return;
+
+            const newValue = prompt('Edit reps for this set:', logged.reps[index]);
+            if (newValue === null) return;
+            const reps = parseInt(newValue);
+            if (!reps || reps <= 0) return;
+
+            logged.reps[index] = reps;
+            saveActiveSession(session);
+            renderSetChipsInto(exerciseName, logged.reps);
+        }
+
+        window.deleteLoggedSet = function(exerciseName, index) {
+            const session = loadActiveSession();
+            if (!session) return;
+            const logged = session.loggedSets[exerciseName];
+            if (!logged) return;
+
+            logged.reps.splice(index, 1);
+            saveActiveSession(session);
+            renderSetChipsInto(exerciseName, logged.reps);
         }
 
         window.endWorkout = function() {
