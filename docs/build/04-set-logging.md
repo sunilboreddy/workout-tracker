@@ -44,3 +44,22 @@ Follows the CR in `docs/design/04-set-logging.md`.
 Verified with the jsdom harness against real localStorage: logged 2 sets (10, 8 reps), edited set 1 to 15 reps (`[15, 8]`), then deleted index 0 (`[8]`) — array and re-rendered chip markup matched expectations at each step. Full existing regression suite (32 prior assertions) still passes unmodified.
 
 **Tracked in:** Issue #45. PR #43.
+
+## Follow-up fix: page zooms/shifts when tapping Weight or Reps
+
+Implements the follow-up fix in `docs/design/04-set-logging.md`.
+
+### What was built
+
+- `.log-set-row input`'s `font-size` raised from `0.9rem` to `1rem` (16px) in `index.html`. No markup or layout changes.
+- `.set-input input` (the equivalent inputs used when building/importing a plan, sharing the same root cause) raised from `0.9rem` to `1rem` for consistency, even though it wasn't reported directly — it's the same component class of bug and was already under investigation in the same change.
+
+### Deviations from design
+
+- None. The viewport meta tag was left untouched, per the design doc's explicit preference for the font-size fix over disabling pinch-zoom.
+
+### Verification
+
+Served the patched `index.html` locally and used Playwright at a 390px-wide mobile viewport. Started a tracking session, confirmed via `getComputedStyle` that all `.log-set-row input` elements report `font-size: 16px`, and confirmed visually (screenshot) that focusing the Weight input keeps the layout centered and full-width with no shift.
+
+**Tracked in:** Reported directly by the user with screenshots during day-to-day use of tracking mode.

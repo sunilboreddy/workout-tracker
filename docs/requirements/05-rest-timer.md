@@ -9,3 +9,10 @@
 *(Implementation note: countdown UI and notification APIs used are deferred to `docs/design/`.)*
 
 **Tracked in:** Requirements #6, Design #11
+
+## Follow-up fix: page zooms/shifts when tapping the custom seconds field
+
+- Tapping the custom rest-duration seconds input zooms the whole page in, same symptom as the set-logging inputs (see `docs/requirements/04-set-logging.md`'s follow-up fix) — the layout ends up shifted/cut off even after the keyboard closes.
+- This must not happen — tapping the custom seconds input should not change the page's zoom level.
+
+**Tracked in:** Reported directly by the user with screenshots during day-to-day use of tracking mode.

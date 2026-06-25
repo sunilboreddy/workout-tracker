@@ -63,3 +63,19 @@ Only `activeSession.loggedSets` is touched — the same shape `endWorkout()` alr
 Log 2 sets, edit the first one's reps via prompt, confirm the array and rendered chip update. Delete a set, confirm the array shrinks and remaining sets renumber correctly in the UI.
 
 **Tracked in:** Issue #45.
+
+## Follow-up fix: page zooms/shifts when tapping Weight or Reps
+
+Implements the follow-up fix in `docs/requirements/04-set-logging.md`.
+
+### Root cause
+
+`.log-set-row input` (the "Weight (kg)" / "Reps" inputs rendered by `renderTrackingExercise`) is styled with `font-size: 0.9rem` (14.4px). Mobile Safari and Chrome auto-zoom the page when a focused input's font-size is below 16px, and the viewport meta tag (`index.html:5`) sets no `maximum-scale`, so nothing constrains that zoom. Once zoomed, the browser scrolls to keep the input in view and doesn't reliably reset on blur, leaving the layout looking shifted/cut off — matching the reported screenshots.
+
+`.form-input, .form-select` (used by the Add Workout modal) are already `font-size: 1rem` and don't exhibit the bug, confirming the diagnosis.
+
+### Fix
+
+Raise `.log-set-row input`'s `font-size` to `1rem` (16px). This is the standard, accessibility-friendly fix — preferred over disabling pinch-zoom via the viewport meta tag, which would remove zoom for users who rely on it. No markup or layout changes needed.
+
+**Tracked in:** Reported directly by the user with screenshots during day-to-day use of tracking mode.

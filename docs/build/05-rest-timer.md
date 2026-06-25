@@ -30,3 +30,21 @@ The beep didn't fire on mobile. Root cause: `finishRestTimer()` created its `Aud
 Fix: `startRestTimer()` (called directly from the preset/Start button click, a real user gesture) now creates/resumes a module-level `restTimerAudioCtx` up front; `finishRestTimer()` reuses that already-unlocked context instead of creating a new one. Verified via the jsdom harness (32/32 assertions, including the existing single-beep test) — real-device audio output isn't observable in jsdom, so this still wants a manual mobile check.
 
 **Tracked in:** Issue #38, PR #41.
+
+## Follow-up fix: page zooms/shifts when tapping the custom seconds field
+
+Implements the follow-up fix in `docs/design/05-rest-timer.md`.
+
+### What was built
+
+- `.rest-custom-input` gained an explicit `font-size: 1rem;` (16px) in `index.html` — it previously had no font-size rule at all, falling back to the browser's sub-16px default control font.
+
+### Deviations from design
+
+- None.
+
+### Verification
+
+Served the patched `index.html` locally and used Playwright at a 390px-wide mobile viewport. Confirmed via `getComputedStyle` that `.rest-custom-input` reports `font-size: 16px`.
+
+**Tracked in:** Reported directly by the user with screenshots during day-to-day use of tracking mode.

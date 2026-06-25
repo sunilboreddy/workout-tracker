@@ -25,3 +25,9 @@ Immediately after `logSet()` succeeds (see `04-set-logging.md`), a small timer c
 Start a 30s timer, confirm countdown displays and decrements every second. Start another timer before the first finishes — confirm only the new one continues (no double-beep at the end). Let one run to completion — confirm a beep and (on a supporting device) vibration fire once.
 
 **Tracked in:** Design #11, Build #16
+
+## Follow-up fix: page zooms/shifts when tapping the custom seconds field
+
+Implements the follow-up fix in `docs/requirements/05-rest-timer.md`. Same root cause as `04-set-logging.md`'s follow-up fix: `.rest-custom-input` sets no explicit `font-size`, so it falls back to the browser's small default control font (under 16px), triggering mobile auto-zoom on focus. Fix: give `.rest-custom-input` an explicit `font-size: 1rem` (16px).
+
+**Tracked in:** Reported directly by the user with screenshots during day-to-day use of tracking mode.
