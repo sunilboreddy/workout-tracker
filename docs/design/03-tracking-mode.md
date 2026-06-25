@@ -49,3 +49,21 @@ On app load, `loadWorkoutPlans()`/`loadWorkoutHistory()` init code also checks `
 Start a plan, log a set, refresh the page — tracking view reappears with that set still shown. End with sets logged — confirm a new entry appears in the Tracker tab history and stats update. Start a plan and End immediately with nothing logged — confirm no history entry was created.
 
 **Tracked in:** Design #9, Build #14
+
+## CR: Full-screen focus mode
+
+Implements the CR in `docs/requirements/03-tracking-mode.md`.
+
+The existing `tracking-active` body class already hides `.tabs` and `.content > .workout-split` while showing `#trackingView` (see the CSS block above this section in `index.html`). `.hero` is a sibling of `.tabs`/`.content`, outside that rule's scope, so it was never hidden — that's the gap.
+
+Fix: add one more selector to the same existing CSS block rather than introducing any new class or JS state:
+
+```css
+body.tracking-active .hero {
+    display: none;
+}
+```
+
+A real second page/navigation was considered and rejected — it would mean a second HTML document, breaking the single-self-contained-file architecture mandated by `CLAUDE.md`. A pure CSS rule riding on the already-correct `tracking-active` toggle (set by `enterTrackingView()`, cleared by `endWorkout()`) achieves the same "dedicated screen" feel with zero new state to keep in sync.
+
+**Tracked in:** reported directly by the user with real-device screenshots.
