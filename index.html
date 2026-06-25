@@ -439,6 +439,12 @@
             color: var(--accent-primary);
         }
 
+        .backup-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
         .add-workout-btn {
             background: var(--accent-primary);
             color: var(--bg-primary);
@@ -823,7 +829,8 @@
 
         /* TRACKING VIEW */
         body.tracking-active .tabs,
-        body.tracking-active .content > .workout-split {
+        body.tracking-active .content > .workout-split,
+        body.tracking-active .hero {
             display: none;
         }
 
@@ -1058,6 +1065,12 @@
                 <div class="tracker-header">
                     <h2 class="tracker-title">Workout History</h2>
                     <button class="add-workout-btn" onclick="openAddWorkoutModal()">+ Log Workout</button>
+                </div>
+
+                <div class="backup-actions">
+                    <button class="add-workout-btn" onclick="exportWorkoutData()">⬇ Export Data</button>
+                    <button class="add-workout-btn" onclick="importWorkoutData()">⬆ Import Data</button>
+                    <input type="file" id="importDataInput" accept="application/json" style="display:none" onchange="handleImportFile(event)">
                 </div>
 
                 <div class="progress-stats" id="progressStats">
@@ -2169,6 +2182,7 @@
                     <div class="empty-state">
                         <div class="empty-state-icon">💪</div>
                         <div class="empty-state-text">No workouts logged yet.<br>Tap the button above to get started!</div>
+                        <div class="empty-state-text" style="margin-top: 0.75rem;">Lost your data? <a href="#" onclick="importWorkoutData(); return false;">Restore from backup</a></div>
                     </div>
                 `;
                 return;
@@ -2222,6 +2236,65 @@
         
         // Make delete function globally available
         window.deleteWorkout = deleteWorkout;
+
+        // Export/import backup data
+        function exportWorkoutData() {
+            const data = {
+                workouts: JSON.parse(localStorage.getItem('workouts') || '[]'),
+                workoutPlans: JSON.parse(localStorage.getItem('workoutPlans') || '[]'),
+                exportedAt: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `workout-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        window.exportWorkoutData = exportWorkoutData;
+
+        function importWorkoutData() {
+            document.getElementById('importDataInput').click();
+        }
+        window.importWorkoutData = importWorkoutData;
+
+        function handleImportFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                let data;
+                try {
+                    data = JSON.parse(reader.result);
+                } catch (e) {
+                    alert('That file is not valid backup JSON.');
+                    return;
+                }
+
+                let workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+                const existingWorkoutIds = new Set(workouts.map(w => w.id));
+                const newWorkouts = (data.workouts || []).filter(w => !existingWorkoutIds.has(w.id));
+                workouts = workouts.concat(newWorkouts);
+                localStorage.setItem('workouts', JSON.stringify(workouts));
+
+                let plans = JSON.parse(localStorage.getItem('workoutPlans') || '[]');
+                const existingPlanIds = new Set(plans.map(p => p.id));
+                const newPlans = (data.workoutPlans || []).filter(p => !existingPlanIds.has(p.id));
+                plans = plans.concat(newPlans);
+                localStorage.setItem('workoutPlans', JSON.stringify(plans));
+
+                loadWorkoutHistory();
+                updateProgressStats();
+                if (typeof renderWorkoutList === 'function') renderWorkoutList();
+
+                alert(`Restored ${newWorkouts.length} workout(s) and ${newPlans.length} plan(s).`);
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+        window.handleImportFile = handleImportFile;
 
         // Update progress stats
         function updateProgressStats() {

@@ -24,3 +24,24 @@ Verified end-to-end with the jsdom harness against real localStorage (not just c
 - `.hero` header confirmed visible (non-`none` computed `display`) while `tracking-active` is set.
 
 **Tracked in:** Design #9, Build #14 (sub-issues #26–#29).
+
+## CR: Full-screen focus mode
+
+Implements the CR in `docs/design/03-tracking-mode.md`.
+
+### What was built
+
+- `index.html`'s `/* TRACKING VIEW */` CSS block gained `.hero` as a third selector alongside the existing `.tabs`/`.content > .workout-split` rule, so it's hidden under `body.tracking-active` too: `body.tracking-active .tabs, body.tracking-active .content > .workout-split, body.tracking-active .hero { display: none; }`. No JS or markup changes — `tracking-active` was already toggled correctly.
+
+### Deviations from design
+
+- None.
+
+### Verification
+
+Served the patched `index.html` locally and drove it with Playwright:
+- `window.startWorkout(1)` → `getComputedStyle` confirms `.hero` and `.tabs` both compute to `display: none`; a screenshot shows only the plan title, End button, and Warm-up exercises full-width from the top of the screen.
+- `window.endWorkout()` → `.hero` and `.tabs` immediately compute back to `block`/`flex`, confirming the toggle still correctly restores the header/tabs on End.
+- Visual spot-check: switching to `#tracker`/`#progression` outside tracking mode is unaffected (hero still shows the stat cards as before).
+
+**Tracked in:** reported directly by the user with real-device screenshots.
