@@ -1,6 +1,6 @@
 # Build: Visual Theme — Neon Sport
 
-Follows: `docs/design/08-theme.md`
+Follows: `docs/design/09-theme.md`
 
 ## What was built
 
@@ -19,4 +19,4 @@ Served the patched `index.html` locally and checked with Playwright:
 - Confirmed via `getComputedStyle` that the "Delete" button on a day card renders `#ff3b6b`, clearly distinct from the lime accent.
 - No layout shift — this was a pure color swap, so the existing 16px-input fix (`04-set-logging.md`/`05-rest-timer.md`) is unaffected.
 
-**Tracked in:** Design `08-theme.md`.
+**Tracked in:** Design `09-theme.md`.

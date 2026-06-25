@@ -1,6 +1,6 @@
 # Design: Visual Theme — Neon Sport
 
-Implements: `docs/requirements/08-theme.md`
+Implements: `docs/requirements/09-theme.md`
 
 ## Approach
 
@@ -26,4 +26,4 @@ The entire app already themes itself through ten CSS custom properties on `:root
 
 Serve `index.html` locally, visually compare the `#workouts` tab (stat cards, tab pills, day cards with Start buttons) and the `#tracker` tab (delete-workout button, favorite star) against the reference mockup — confirm primary highlights read as neon lime and destructive actions read as a clearly distinct pink/red. Confirm no layout shift (this is a pure color swap, so the existing 16px-input fix from `04-set-logging.md`/`05-rest-timer.md` is unaffected).
 
-**Tracked in:** Requirements `08-theme.md`.
+**Tracked in:** Requirements `09-theme.md`.
