@@ -15,6 +15,7 @@ These documents describe **what** the app needs to do and **why** — not how it
 6. [06-open-questions.md](./06-open-questions.md) — anything still undecided
 7. [07-import-plan.md](./07-import-plan.md) — creating a plan by pasting Claude-generated JSON instead of manual entry
 8. [08-per-set-weight.md](./08-per-set-weight.md) — tracking weight per logged set instead of once per exercise
+9. [09-theme.md](./09-theme.md) — the Neon Sport visual color theme
 
 Note: editing/deleting a logged set is a CR against [04-set-logging.md](./04-set-logging.md), not a separate file — see the "CR" section there.
 
