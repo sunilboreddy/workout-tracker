@@ -25,6 +25,7 @@ These documents describe **how** the requirements get implemented within the exi
 7. [08-per-set-weight.md](./08-per-set-weight.md) — `loggedSets`/history data model change to track weight per set
 8. [09-theme.md](./09-theme.md) — Neon Sport `:root` color variable remap
 9. [10-data-backup.md](./10-data-backup.md) — Export/Import buttons, JSON file shape, merge-by-id semantics
+10. [11-ios-app.md](./11-ios-app.md) — Capacitor wrapper, native plugin replacements, GitHub Actions build
 
 Note: editing/deleting a logged set is a CR against [04-set-logging.md](./04-set-logging.md), not a separate file — see the "CR" section there. The full-screen focus mode during tracking is a CR against [03-tracking-mode.md](./03-tracking-mode.md), also not a separate file.
 

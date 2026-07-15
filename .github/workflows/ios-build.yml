@@ -1,0 +1,55 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [feature/capacitor-ios]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'www/**'
+      - 'ios/**'
+      - 'capacitor.config.json'
+      - 'package.json'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync Capacitor
+        run: npx cap sync ios
+
+      - name: Install CocoaPods
+        run: |
+          cd ios/App
+          pod install --repo-update
+
+      - name: Build (unsigned simulator)
+        run: |
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            build \
+            | xcpretty || true
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: '*.log'

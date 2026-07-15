@@ -17,6 +17,7 @@ These documents describe **what** the app needs to do and **why** — not how it
 8. [08-per-set-weight.md](./08-per-set-weight.md) — tracking weight per logged set instead of once per exercise
 9. [09-theme.md](./09-theme.md) — the Neon Sport visual color theme
 10. [10-data-backup.md](./10-data-backup.md) — exporting/importing workout data as a JSON backup file
+11. [11-ios-app.md](./11-ios-app.md) — native iPhone app via Capacitor (TestFlight + App Store)
 
 Note: editing/deleting a logged set is a CR against [04-set-logging.md](./04-set-logging.md), not a separate file — see the "CR" section there. The full-screen focus mode during tracking is a CR against [03-tracking-mode.md](./03-tracking-mode.md), also not a separate file.
 
