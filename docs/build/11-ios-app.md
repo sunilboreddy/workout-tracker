@@ -19,7 +19,8 @@ Follows: `docs/design/11-ios-app.md`
 
 ### Deviations from design
 
-- None. `@capacitor-community/file-picker` (the original plan) doesn't exist on npm under that scope; used `@capawesome/capacitor-file-picker` instead (maintained by the same author, same API surface, Capacitor 6+ compatible).
+- `@capacitor-community/file-picker` (the original plan) doesn't exist on npm under that scope; used `@capawesome/capacitor-file-picker` instead (maintained by the same author, same API surface, Capacitor 6+ compatible).
+- CI workflow initially had a `pod install` step and `-workspace App.xcworkspace` (CocoaPods style). Capacitor 8 uses Swift Package Manager — no Podfile, no `.xcworkspace`. Fixed: removed CocoaPods step entirely; switched xcodebuild to `-project ios/App/App.xcodeproj`. SPM dependencies resolve automatically when xcodebuild runs.
 
 ### Verification
 
