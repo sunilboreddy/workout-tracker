@@ -4,52 +4,63 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A mobile-friendly workout tracking app implemented as a **single self-contained HTML file** (`index.html`). No build step, no package manager, no dependencies, no backend. All HTML, CSS (in a `<style>` block), and JavaScript (in a `<script>` block at the bottom) live in that one file.
+A workout tracking app. It is moving from a single-file web app to a **native SwiftUI iOS app** (`WorkoutTracker/`, iOS 17+). Going forward, new work happens in the SwiftUI app. The web app (`index.html`) and the Capacitor wrapper (`ios/`, `www/`, `package.json`, `capacitor.config.json`) are **legacy**: leave them untouched until the user confirms the SwiftUI app matches them, then remove them in a separate change.
 
-## Running / developing
+## SwiftUI app (primary)
 
-There is no build or test tooling. To work on this app:
-- Open `index.html` directly in a browser, or serve it locally (e.g. `python3 -m http.server`) and visit it.
-- Reload the browser after any edit — there is no dev server with hot reload.
-- Test changes manually in-browser (mobile viewport recommended, since this is mobile-first).
+Layout:
+- `WorkoutTracker/project.yml` — XcodeGen spec. The Xcode project is **generated** from it and git-ignored.
+- `WorkoutTracker/App/` — app code: models (`Models.swift`), `AppStore.swift` (`@Observable` state + JSON persistence), `PlanImport.swift`, `Stats.swift`, `Backup.swift`, `RestTimer.swift`, `Theme.swift`, `Haptics.swift`, seed/progression data, and `Views/`.
+- `WorkoutTracker/Tests/` — XCTest unit tests for the logic layer.
 
-## Deployment
+Rules:
+- **Never hand-edit the `.xcodeproj`/`.pbxproj`.** After adding, removing or renaming Swift files, or changing targets/settings, edit `project.yml` if needed and re-run `xcodegen` in `WorkoutTracker/`.
+- Minimum iOS 17. Swift language mode 5. SwiftUI + the Observation framework (`@Observable`). No third-party dependencies unless asked.
+- Keep logic (store, stats, import, backup, timer) in plain, testable Swift; keep views thin. Add or update XCTest tests with every logic change.
+- Data is stored as JSON in Application Support. The backup file format is shared with the legacy web app (`workouts`, `workoutPlans`, `exportedAt`); never break it, and keep old-shape history entries (single `weight`) decoding correctly.
+- Theme is "Neon Sport" (`Theme.swift`): near-black background, lime accent `#C4F600`, pink `#FF3B6B` for destructive actions.
 
-Static GitHub Pages deploy: push to the repo, enable Pages from the main branch, served at `https://<user>.github.io/workout-tracker`.
+Commands (run from the repo root):
+
+```bash
+brew install xcodegen xcbeautify          # one-time
+cd WorkoutTracker && xcodegen && cd ..    # (re)generate the Xcode project
+xcrun simctl list devices available       # choose a simulator; don't assume a name
+xcodebuild test \
+  -project WorkoutTracker/WorkoutTracker.xcodeproj \
+  -scheme WorkoutTracker \
+  -destination 'platform=iOS Simulator,name=<chosen device>' \
+  CODE_SIGNING_ALLOWED=NO | xcbeautify
+```
+
+To check UI changes, build, install and launch in the Simulator and look at screenshots (`xcrun simctl boot/install/launch`, `xcrun simctl io booted screenshot <file>`, or any simulator tools available). Haptics only work on a real device.
+
+CI: `.github/workflows/swiftui-build.yml` generates the project, builds and runs the unit tests on macOS for pushes to `feature/swiftui-app` and PRs touching `WorkoutTracker/`. It should be green before merging.
+
+Not set up yet: app icon, code signing, TestFlight/App Store (needs an Apple Developer account).
 
 ## Project docs
 
-**Every change to `index.html` — feature or bug fix, no exceptions — must be traceable through `docs/` in three phases, each referencing the previous:**
+**Every change to app behaviour (SwiftUI or legacy web) — feature or bug fix, no exceptions — must be traceable through `docs/` in three phases, each referencing the previous:**
 - `docs/requirements/` — what we're building/fixing and why, never how. Small capability-focused files with an `index.md` linking them.
 - `docs/design/` — how we'll build it (data model, UI flow, code structure). Each design doc references the specific `docs/requirements/*.md` file(s) it implements.
 - `docs/build/` — implementation notes/changelog for the build phase. Each build doc references the specific `docs/design/*.md` file(s) it follows.
 
-**Do not write or edit code before this chain exists for the change.** The order is always requirements → design → build → code:
+**Do not write or edit app code before this chain exists for the change.** The order is always requirements → design → build → code:
 1. Write or update the requirements doc first — what's broken or wanted, and why.
 2. Write or update the design doc next, referencing that requirements doc — how it'll be implemented.
-3. Only then touch `index.html`, and write/update the build doc referencing that design doc as you go — a real changelog (what was built, deviations, verification), not a pre-written task list.
+3. Only then touch the code, and write/update the build doc referencing that design doc as you go — a real changelog (what was built, deviations, verification), not a pre-written task list.
 
-This applies to bug fixes too, not just new capabilities: a one-line fix still gets a short requirements note (what was broken), a short design note (root cause + fix approach) if it's not trivial, and a build note (what changed, how it was verified) — added to the existing capability's docs (e.g. a "Follow-up fix" section) rather than skipped because it's "just a bug." Don't let implementation details leak into requirements docs, and don't skip ahead in the chain even under time pressure.
+This applies to bug fixes too: a one-line fix still gets a short requirements note (what was broken), a short design note (root cause + fix approach) if it's not trivial, and a build note (what changed, how it was verified) — added to the existing capability's docs (e.g. a "Follow-up fix" section) rather than skipped because it's "just a bug." Don't let implementation details leak into requirements docs, and don't skip ahead in the chain even under time pressure.
 
-## Architecture
+The SwiftUI app's docs are the `12-swiftui-app.md` files in each folder (earlier numbered files describe the behaviour being carried over).
 
-Everything is in `index.html`, organized in three parts:
+## Git workflow
 
-1. **`<style>` (head)** — dark-themed CSS using custom properties (`--bg-primary`, `--accent-primary`, etc.) defined on `:root`. Visual sections include `.hero` (stats header), `.tabs`, `.workout-split` cards, and the add-workout `.modal`.
-2. **Body markup** — a tab bar (`.tab[data-tab=...]`) controls which `.workout-split` panel is visible via the `active` class. Panels by id:
-   - `#tracker` — workout history + progress stats, populated dynamically by JS.
-   - `#3day`, `#4day`, `#5day` — static hardcoded workout split content (day cards).
-   - `#progression` — static progression guide content (squats/pull-ups/push-ups).
-   The "Add Workout" flow uses `#addWorkoutModal`, with exercise rows dynamically built into `#exercisesContainer`.
-3. **`<script>` (bottom)** — all app logic, no modules/classes, plain functions and a few `window.*` globals (needed because they're invoked from inline `onclick=` attributes in generated markup):
-   - Tab switching: toggles `.active` on `.tab` and corresponding `.workout-split`.
-   - Add-workout modal: `addExercise()` / `removeExercise()` / `addSet()` dynamically build exercise/set input rows with ids like `exercise-{n}`, `exerciseName-{n}`, `set-{n}-{setIndex}`.
-   - Persistence: the entire workout log is one array under the `workouts` localStorage key. Each workout: `{ id (timestamp), type, date, exercises: [{ name, weight, sets: [reps...] }] }`. There is no other storage key and no backend — all data is local to the browser.
-   - Derived stats (`updateProgressStats`): total workouts, workouts this week, best pull-up/push-up totals — computed by re-scanning the full `workouts` array on every load/save/delete. Exercise matching for pull-ups/push-ups is done via substring checks on lowercased exercise names (e.g. `'pull-up'`, `'pullup'`).
-   - `formatDate()` renders relative labels ("Today"/"Yesterday") else a short date.
+- Develop on a feature branch, commit in small reviewable steps, open a PR to `main` when asked.
+- **After a PR is merged, delete the feature branch** (local and remote).
+- Do not make the repository private without asking the user first: it takes the legacy GitHub Pages site offline and makes macOS CI minutes cost 10x.
 
-## Conventions to follow when editing
+## Legacy web app (`index.html`)
 
-- Keep everything in `index.html` — don't introduce a build step or split into modules unless explicitly asked.
-- New interactive elements created via `innerHTML` template strings that need `onclick` handlers must expose those handlers on `window` (see `window.addExercise`, `window.deleteWorkout`, etc.), since inline `onclick=` resolves against globals, not closures.
-- Any new persisted data should go through the same read-modify-write pattern against the `workouts` localStorage array — there's no separate data layer to route through.
+A single self-contained HTML file (HTML, CSS in `<style>`, JS in a `<script>`), no build step, no dependencies, served via GitHub Pages. Data is in browser `localStorage` (`workouts`, `workoutPlans`, `activeSession`). Open it directly in a browser to test. Keep everything in that one file and expose `onclick` handlers on `window`. The Capacitor copy in `www/index.html` is generated from it by hand; do not change either unless asked.
