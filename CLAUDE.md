@@ -35,7 +35,7 @@ xcodebuild test \
 
 To check UI changes, build, install and launch in the Simulator and look at screenshots (`xcrun simctl boot/install/launch`, `xcrun simctl io booted screenshot <file>`, or any simulator tools available). Haptics only work on a real device.
 
-CI: `.github/workflows/swiftui-build.yml` generates the project, builds and runs the unit tests on macOS for pushes to `feature/swiftui-app` and PRs touching `WorkoutTracker/`. It should be green before merging.
+CI: `.github/workflows/swiftui-build.yml` generates the project, builds and runs the unit tests on macOS on PRs touching `WorkoutTracker/` and on manual runs (Actions tab → Run workflow). It does not run on every push. It should be green before merging.
 
 Not set up yet: app icon, code signing, TestFlight/App Store (needs an Apple Developer account).
 
