@@ -3,3 +3,10 @@ Thumbs.db
 *.log
 node_modules/
 .playwright-mcp/
+
+# iOS build artifacts (keep ios/ project files, not build outputs)
+ios/App/Pods/
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/DerivedData/
+*.ipa
+*.xcarchive
