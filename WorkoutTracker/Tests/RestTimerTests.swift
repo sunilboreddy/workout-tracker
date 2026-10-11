@@ -42,13 +42,18 @@ final class RestTimerTests: XCTestCase {
         timer.start(seconds: 3, now: t0.addingTimeInterval(1), autoTick: false)
         XCTAssertEqual(timer.remaining, 3)
 
-        timer.tick(now: t0.addingTimeInterval(5)) // original would have finished here; replacement has 1s left
+        // The replacement ends at t0+4 (started at t0+1 for 3s); the original would have ended at t0+5.
+        timer.tick(now: t0.addingTimeInterval(3))
         XCTAssertTrue(timer.isRunning)
+        XCTAssertEqual(timer.remaining, 1)
         XCTAssertEqual(fired, 0)
 
         timer.tick(now: t0.addingTimeInterval(4))
         XCTAssertEqual(fired, 1)
         XCTAssertFalse(timer.isRunning)
+
+        timer.tick(now: t0.addingTimeInterval(5)) // the replaced timer must not beep again
+        XCTAssertEqual(fired, 1)
     }
 
     func testStopIsSilent() {
