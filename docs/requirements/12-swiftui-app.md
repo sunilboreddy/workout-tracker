@@ -17,6 +17,7 @@ The current iOS app is the web app (`index.html`) wrapped in Capacitor (`11-ios-
   - Progressions reference content (universal protocol and the squat, pull-up, push-up progressions).
   - Data backup: export all data to a file the user controls and import it back without ever discarding data already on the device; offer restore when there is no history (`10-data-backup.md`).
   - The Neon Sport look: near-black background, neon lime accent, hot pink for destructive actions (`09-theme.md`).
+- A home-screen app icon in the Neon Sport palette, distinct from the generic dumbbell/barbell icons common in the fitness-app category, and legible down to the smallest iOS icon sizes (Settings/Spotlight).
 - The existing JSON backup file format must be accepted, so data from the web/Capacitor app can be brought across into the native app.
 - Data lives in app-owned storage that the OS does not evict like browser storage.
 - Runs on iPhone, iOS 17 or later.

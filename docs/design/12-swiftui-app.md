@@ -92,6 +92,10 @@ First launch (no `plans.json`) seeds the three `SeedPlans` once, then they are o
 
 `Theme.swift` defines the Neon Sport palette from `09-theme.md` as `Color` constants: background `#0F0F12`, secondary `#141420`, card `#181820`, accent lime `#C4F600`, warm/destructive `#FF3B6B`, text `#FFFFFF` / `#B8BCC4` / `#6B6B76`, border `#23232E`. The app forces dark appearance (`.preferredColorScheme(.dark)`).
 
+## App icon
+
+A single full-bleed 1024×1024 asset in `WorkoutTracker/App/Assets.xcassets/AppIcon.appiconset` (the modern single-universal-size format; Xcode derives every other size from it): a lime (`#C4F600`) ground with a near-black (`#0F0F12`) lightning-bolt mark, inverted from the rest of the UI's near-black-background convention so the icon reads as a distinct, bright mark on the home screen. No alpha channel and no self-applied corner radius (the system clips and adds the specular highlight), per Apple's HIG. The bolt was chosen over literal dumbbell/barbell options and over multi-part marks (a stick-figure pose, a two-tone target) because a single committed silhouette stays legible at the smallest icon sizes (20–29pt) and survives iOS's tinted-icon mode, where the system recolors the icon to a single user-chosen hue. `ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon` in `project.yml` wires it up; `GENERATE_INFOPLIST_FILE` picks it up automatically.
+
 ## Haptics
 
 `Haptics.success()`, `.impact()`, `.selection()` wrap `UINotificationFeedbackGenerator` / `UIImpactFeedbackGenerator` / `UISelectionFeedbackGenerator`. They are silent no-ops on the Simulator, so nothing needs a guard.
